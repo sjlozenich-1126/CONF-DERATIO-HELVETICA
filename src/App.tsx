@@ -541,7 +541,7 @@ export default function App() {
   const pendingProposalsCount = proposals.filter(p => p.status === 'PENDING').length;
 
   return (
-    <div className="min-h-screen bg-[#070b14] text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#0b0d13] text-slate-100 flex flex-col font-sans">
       {/* Top Swiss Sovereign Insignia & Navbar */}
       <Navbar
         activeTab={activeTab}
@@ -649,13 +649,13 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800/80 bg-[#060a14] py-6 text-xs text-slate-500">
+      <footer className="border-t border-slate-800/80 bg-[#0e1118] py-6 text-xs text-slate-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center space-x-2">
             <span className="inline-flex items-center justify-center w-3.5 h-3.5 bg-red-600 rounded-[2px] text-white font-bold text-[9px] leading-none">
               +
             </span>
-            <span className="font-cinzel text-slate-300 font-semibold">FIDUCIA CENTRALE</span>
+            <span className="font-corporate text-slate-200 font-semibold tracking-wider">FIDUCIA CENTRALE</span>
             <span>• Zurich & Geneva, Switzerland</span>
           </div>
           <div className="flex flex-wrap items-center gap-4 text-[11px] font-mono text-slate-400">

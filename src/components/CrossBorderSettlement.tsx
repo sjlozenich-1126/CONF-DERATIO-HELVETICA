@@ -10,19 +10,16 @@ import {
   ShieldCheck, 
   CheckCircle2, 
   Clock, 
-  ExternalLink, 
-  Copy, 
+  RefreshCw, 
   Globe2, 
-  Lock,
-  FileCheck2,
-  RefreshCw
+  FileCheck2 
 } from 'lucide-react';
 import { SettlementTransaction, MultiSigSigner } from '../types/fiducia';
 import { truncateHash } from '../utils/crypto';
 
 interface CrossBorderSettlementProps {
   settlements: SettlementTransaction[];
-  onExecuteSettlement: (newTx: SettlementTransaction) => void;
+  onExecuteSettlement: (tx: SettlementTransaction) => void;
   currentSigner: MultiSigSigner;
 }
 
@@ -33,12 +30,10 @@ export const CrossBorderSettlement: React.FC<CrossBorderSettlementProps> = ({
 }) => {
   const [corridor, setCorridor] = useState('Project Agora Corridor (Swiss Helvetia ⇄ Eurosystem TIPS)');
   const [txType, setTxType] = useState<SettlementTransaction['txType']>('PvP');
-  const [senderJurisdiction, setSenderJurisdiction] = useState('Switzerland (Zurich / SIC)');
-  const [senderEntity, setSenderEntity] = useState('Fiducia Centrale Clearing Pool');
-  const [receiverJurisdiction, setReceiverJurisdiction] = useState('Germany (Frankfurt / Deutsche Bundesbank)');
-  const [receiverEntity, setReceiverEntity] = useState('European Central Bank Liquidity Desk');
   const [deliverAmount, setDeliverAmount] = useState('10,000,000 FCHF');
-  const [receiveAmount, setReceiveAmount] = useState('10,650,000 EUR');
+  const [receiveAmount, setReceiveAmount] = useState('9,400,000 EUR');
+  const [senderEntity, setSenderEntity] = useState('Fiducia Centrale Settlement Trust');
+  const [receiverEntity, setReceiverEntity] = useState('Banque de France / Target2 Participant');
   const [isProcessing, setIsProcessing] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -48,40 +43,41 @@ export const CrossBorderSettlement: React.FC<CrossBorderSettlementProps> = ({
 
     setTimeout(() => {
       const newTx: SettlementTransaction = {
-        id: `SETTL-${Date.now().toString().slice(-6)}`,
-        txType,
-        senderJurisdiction,
-        senderEntity,
-        receiverJurisdiction,
-        receiverEntity,
+        id: `TX-SETTLE-${Math.floor(1000 + Math.random() * 9000)}`,
         settlementCorridor: corridor,
+        txType,
+        senderJurisdiction: 'Switzerland (FINMA)',
+        senderEntity,
+        receiverJurisdiction: 'Foreign Central Bank / Interbank Rail',
+        receiverEntity,
         deliverAmount,
         receiveAmount,
         timestamp: new Date().toISOString(),
-        status: 'COMPLETED',
+        status: 'SETTLED_RTGS',
         travelRuleIVMS101: true,
-        clearingHash: `0x${Math.random().toString(16).slice(2)}${Math.random().toString(16).slice(2)}`
+        clearingHash: `0x${Math.random().toString(16).slice(2, 10)}${Math.random().toString(16).slice(2, 10)}`
       };
 
       onExecuteSettlement(newTx);
+
       setIsProcessing(false);
-      setSuccessMessage(`Settlement ${newTx.id} atomically executed via ${corridor}. FATF Travel Rule IVMS 101 payload verified.`);
-      setTimeout(() => setSuccessMessage(null), 6000);
+      setSuccessMessage(`Cross-border settlement finalized under Swiss-International treaty protocol.`);
+      setTimeout(() => setSuccessMessage(null), 4000);
     }, 1000);
   };
 
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="bg-[#0b1329]/90 border border-slate-800 rounded-xl p-5 shadow-sm">
+      <div className="bg-[#121620] border border-slate-800 rounded-xl p-5 shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-2">
-              <Send className="w-5 h-5 text-amber-400" />
-              <h2 className="text-lg font-cinzel font-bold text-slate-100">
+            <div className="flex items-center space-x-2.5">
+              <Send className="w-5 h-5 text-slate-300" />
+              <h2 className="text-lg font-corporate font-bold text-slate-100 tracking-tight">
                 Cross-Border Settlement & DvP / PvP Clearing Rail
               </h2>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-blue-950/60 text-blue-300 border border-blue-800/40">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-300 border border-slate-700">
                 FATF TRAVEL RULE & BIS AGORA ALIGNED
               </span>
             </div>
@@ -100,11 +96,11 @@ export const CrossBorderSettlement: React.FC<CrossBorderSettlementProps> = ({
       {/* Grid: Settlement Execution Form + Corridors */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Settlement Simulator */}
-        <div className="lg:col-span-5 bg-[#0b1329]/90 border border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
+        <div className="lg:col-span-5 bg-[#121620] border border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
             <div className="flex items-center space-x-2">
-              <ArrowRightLeft className="w-4 h-4 text-amber-400" />
-              <h3 className="text-sm font-cinzel font-bold text-slate-100 uppercase tracking-wide">
+              <ArrowRightLeft className="w-4 h-4 text-slate-300" />
+              <h3 className="text-sm font-corporate font-bold text-slate-100 uppercase tracking-wide">
                 Initiate Cross-Border Transfer
               </h3>
             </div>
@@ -124,7 +120,7 @@ export const CrossBorderSettlement: React.FC<CrossBorderSettlementProps> = ({
               <select
                 value={corridor}
                 onChange={(e) => setCorridor(e.target.value)}
-                className="w-full bg-[#080d1c] border border-slate-700 rounded-lg p-2 text-slate-200 text-[11px]"
+                className="w-full bg-[#0d1017] border border-slate-700 rounded-lg p-2 text-slate-200 text-[11px]"
               >
                 <option value="Project Agora Corridor (Swiss Helvetia ⇄ Eurosystem TIPS)">
                   Project Agora Corridor (Swiss Helvetia ⇄ Eurosystem TIPS)
@@ -147,7 +143,7 @@ export const CrossBorderSettlement: React.FC<CrossBorderSettlementProps> = ({
                 <select
                   value={txType}
                   onChange={(e) => setTxType(e.target.value as any)}
-                  className="w-full bg-[#080d1c] border border-slate-700 rounded-lg p-2 text-slate-200"
+                  className="w-full bg-[#0d1017] border border-slate-700 rounded-lg p-2 text-slate-200"
                 >
                   <option value="PvP">Payment vs Payment (PvP)</option>
                   <option value="DvP">Delivery vs Payment (DvP)</option>
@@ -171,7 +167,7 @@ export const CrossBorderSettlement: React.FC<CrossBorderSettlementProps> = ({
                   type="text"
                   value={deliverAmount}
                   onChange={(e) => setDeliverAmount(e.target.value)}
-                  className="w-full bg-[#080d1c] border border-slate-700 rounded-lg p-2 text-slate-100 font-mono"
+                  className="w-full bg-[#0d1017] border border-slate-700 rounded-lg p-2 text-slate-100 font-mono"
                 />
               </div>
 
@@ -181,7 +177,7 @@ export const CrossBorderSettlement: React.FC<CrossBorderSettlementProps> = ({
                   type="text"
                   value={receiveAmount}
                   onChange={(e) => setReceiveAmount(e.target.value)}
-                  className="w-full bg-[#080d1c] border border-slate-700 rounded-lg p-2 text-slate-100 font-mono"
+                  className="w-full bg-[#0d1017] border border-slate-700 rounded-lg p-2 text-slate-100 font-mono"
                 />
               </div>
             </div>
@@ -193,7 +189,7 @@ export const CrossBorderSettlement: React.FC<CrossBorderSettlementProps> = ({
                   type="text"
                   value={senderEntity}
                   onChange={(e) => setSenderEntity(e.target.value)}
-                  className="w-full bg-[#080d1c] border border-slate-700 rounded-lg p-2 text-slate-200 text-[11px]"
+                  className="w-full bg-[#0d1017] border border-slate-700 rounded-lg p-2 text-slate-200 text-[11px]"
                 />
               </div>
 
@@ -203,7 +199,7 @@ export const CrossBorderSettlement: React.FC<CrossBorderSettlementProps> = ({
                   type="text"
                   value={receiverEntity}
                   onChange={(e) => setReceiverEntity(e.target.value)}
-                  className="w-full bg-[#080d1c] border border-slate-700 rounded-lg p-2 text-slate-200 text-[11px]"
+                  className="w-full bg-[#0d1017] border border-slate-700 rounded-lg p-2 text-slate-200 text-[11px]"
                 />
               </div>
             </div>
@@ -211,11 +207,11 @@ export const CrossBorderSettlement: React.FC<CrossBorderSettlementProps> = ({
             <button
               type="submit"
               disabled={isProcessing}
-              className="w-full py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center space-x-1.5 shadow-md shadow-amber-500/10 transition-all cursor-pointer"
+              className="w-full py-2.5 rounded-lg bg-slate-100 hover:bg-white text-slate-900 font-semibold text-xs flex items-center justify-center space-x-1.5 shadow-sm transition-all cursor-pointer"
             >
               {isProcessing ? (
                 <>
-                  <RefreshCw className="w-4 h-4 animate-spin" />
+                  <RefreshCw className="w-4 h-4 animate-spin text-slate-900" />
                   <span>Transmitting Encrypted IVMS 101 Packet...</span>
                 </>
               ) : (
@@ -229,12 +225,12 @@ export const CrossBorderSettlement: React.FC<CrossBorderSettlementProps> = ({
         </div>
 
         {/* Right Column: Settlement History Table */}
-        <div className="lg:col-span-7 bg-[#0b1329]/90 border border-slate-800 rounded-xl overflow-hidden shadow-sm flex flex-col justify-between">
+        <div className="lg:col-span-7 bg-[#121620] border border-slate-800 rounded-xl overflow-hidden shadow-sm flex flex-col justify-between">
           <div>
             <div className="p-4 border-b border-slate-800 flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <Globe2 className="w-4 h-4 text-amber-400" />
-                <h3 className="text-sm font-cinzel font-bold text-slate-100 uppercase tracking-wide">
+                <Globe2 className="w-4 h-4 text-slate-300" />
+                <h3 className="text-sm font-corporate font-bold text-slate-100 uppercase tracking-wide">
                   Cross-Border Settlement Log & Clearing Proofs
                 </h3>
               </div>
@@ -243,14 +239,14 @@ export const CrossBorderSettlement: React.FC<CrossBorderSettlementProps> = ({
 
             <div className="divide-y divide-slate-800/70">
               {settlements.map(s => (
-                <div key={s.id} className="p-4 hover:bg-slate-800/30 transition-colors space-y-2">
+                <div key={s.id} className="p-4 hover:bg-slate-800/40 transition-colors space-y-2">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                     <div>
                       <div className="flex items-center space-x-2">
-                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-950/60 text-blue-300 border border-blue-800/40">
+                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
                           {s.txType}
                         </span>
-                        <span className="font-mono text-amber-400 text-xs font-semibold">{s.id}</span>
+                        <span className="font-mono text-slate-200 text-xs font-semibold">{s.id}</span>
                         <span className="text-[10px] text-slate-400 flex items-center gap-1">
                           <Clock className="w-3 h-3 text-slate-500" />
                           {new Date(s.timestamp).toLocaleTimeString()}
@@ -266,7 +262,7 @@ export const CrossBorderSettlement: React.FC<CrossBorderSettlementProps> = ({
                     </div>
                   </div>
 
-                  <div className="bg-[#080d1c] p-2 rounded-lg border border-slate-800/80 flex flex-col sm:flex-row justify-between gap-2 text-[11px]">
+                  <div className="bg-[#0d1017] p-2 rounded-lg border border-slate-800/80 flex flex-col sm:flex-row justify-between gap-2 text-[11px]">
                     <div>
                       <span className="text-slate-500 block text-[10px]">DELIVERED:</span>
                       <strong className="text-slate-200 font-mono">{s.deliverAmount}</strong>
@@ -294,7 +290,7 @@ export const CrossBorderSettlement: React.FC<CrossBorderSettlementProps> = ({
             </div>
           </div>
 
-          <div className="p-3 bg-[#080d1c] border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
+          <div className="p-3 bg-[#0d1017] border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
             <span className="flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
               Swiss Helvetia wCBDC & Eurosystem TIPS Interoperability Engine

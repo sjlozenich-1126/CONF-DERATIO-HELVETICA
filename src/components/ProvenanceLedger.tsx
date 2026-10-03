@@ -17,7 +17,7 @@ import {
   Clock, 
   AlertCircle 
 } from 'lucide-react';
-import { ProvenanceBlock, AtlasStratum, AtlasLevel } from '../types/fiducia';
+import { ProvenanceBlock } from '../types/fiducia';
 import { truncateHash, STRATA_WEIGHTS, LEVEL_MULTIPLIERS } from '../utils/crypto';
 
 interface ProvenanceLedgerProps {
@@ -73,12 +73,12 @@ export const ProvenanceLedger: React.FC<ProvenanceLedgerProps> = ({
   return (
     <div className="space-y-4">
       {/* Header section with verification & export */}
-      <div className="bg-[#0b1329]/90 border border-slate-800 rounded-xl p-5 shadow-sm">
+      <div className="bg-[#121620] border border-slate-800 rounded-xl p-5 shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-2">
-              <Layers className="w-5 h-5 text-amber-400" />
-              <h2 className="text-lg font-cinzel font-bold text-slate-100">
+            <div className="flex items-center space-x-2.5">
+              <Layers className="w-5 h-5 text-slate-300" />
+              <h2 className="text-lg font-corporate font-bold text-slate-100 tracking-tight">
                 S06 Provenance Ledger & Blockchain Explorer
               </h2>
               <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-emerald-950/60 text-emerald-300 border border-emerald-800/40">
@@ -94,9 +94,9 @@ export const ProvenanceLedger: React.FC<ProvenanceLedgerProps> = ({
             <button
               onClick={onVerifyIntegrity}
               disabled={isVerifying}
-              className="flex items-center space-x-1.5 px-3 py-2 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-medium transition-all"
+              className="flex items-center space-x-1.5 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-medium transition-all"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${isVerifying ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`w-3.5 h-3.5 ${isVerifying ? 'animate-spin text-slate-300' : 'text-slate-400'}`} />
               <span>{isVerifying ? 'Verifying Merkle Tree...' : 'Verify Cryptographic Integrity'}</span>
             </button>
 
@@ -104,7 +104,7 @@ export const ProvenanceLedger: React.FC<ProvenanceLedgerProps> = ({
               onClick={exportJSON}
               className="flex items-center space-x-1.5 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-medium transition-all"
             >
-              <Download className="w-3.5 h-3.5" />
+              <Download className="w-3.5 h-3.5 text-slate-400" />
               <span>Export Ledger</span>
             </button>
           </div>
@@ -130,7 +130,7 @@ export const ProvenanceLedger: React.FC<ProvenanceLedgerProps> = ({
               placeholder="Search by block #, SHA-256 hash, action, entity, custodian..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#080d1c] border border-slate-700/80 rounded-lg pl-9 pr-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500/60"
+              className="w-full bg-[#0d1017] border border-slate-700/80 rounded-lg pl-9 pr-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-slate-500"
             />
           </div>
 
@@ -138,7 +138,7 @@ export const ProvenanceLedger: React.FC<ProvenanceLedgerProps> = ({
             <select
               value={selectedStratum}
               onChange={(e) => setSelectedStratum(e.target.value)}
-              className="w-full bg-[#080d1c] border border-slate-700/80 rounded-lg px-3 py-2 text-xs text-slate-300 focus:outline-none focus:border-amber-500/60"
+              className="w-full bg-[#0d1017] border border-slate-700/80 rounded-lg px-3 py-2 text-xs text-slate-300 focus:outline-none focus:border-slate-500 cursor-pointer"
             >
               <option value="ALL">All Strata (S01–S08)</option>
               {Object.entries(STRATA_WEIGHTS).map(([code, val]) => (
@@ -153,7 +153,7 @@ export const ProvenanceLedger: React.FC<ProvenanceLedgerProps> = ({
             <select
               value={selectedLevel}
               onChange={(e) => setSelectedLevel(e.target.value)}
-              className="w-full bg-[#080d1c] border border-slate-700/80 rounded-lg px-3 py-2 text-xs text-slate-300 focus:outline-none focus:border-amber-500/60"
+              className="w-full bg-[#0d1017] border border-slate-700/80 rounded-lg px-3 py-2 text-xs text-slate-300 focus:outline-none focus:border-slate-500 cursor-pointer"
             >
               <option value="ALL">All Levels (L1–L5)</option>
               {Object.entries(LEVEL_MULTIPLIERS).map(([code, val]) => (
@@ -171,7 +171,7 @@ export const ProvenanceLedger: React.FC<ProvenanceLedgerProps> = ({
         {filteredBlocks.map((block, idx) => (
           <div 
             key={block.blockNumber}
-            className="bg-[#0b1329]/90 border border-slate-800 hover:border-amber-500/40 rounded-xl p-4.5 transition-all shadow-sm relative overflow-hidden"
+            className="bg-[#121620] border border-slate-800 hover:border-slate-700 rounded-xl p-4.5 transition-all shadow-sm relative overflow-hidden"
           >
             {/* Visual connector line indicating block chaining */}
             {idx < filteredBlocks.length - 1 && (
@@ -181,9 +181,9 @@ export const ProvenanceLedger: React.FC<ProvenanceLedgerProps> = ({
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
               <div className="flex items-start space-x-3.5">
                 {/* Block Height Badge */}
-                <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-2.5 text-center min-w-[70px]">
-                  <span className="text-[10px] uppercase text-amber-400 font-bold block">BLOCK</span>
-                  <span className="text-base font-cinzel font-bold text-amber-300">#{block.blockNumber}</span>
+                <div className="bg-slate-800/80 border border-slate-700 rounded-lg p-2.5 text-center min-w-[70px]">
+                  <span className="text-[10px] uppercase text-slate-400 font-bold block tracking-wider">BLOCK</span>
+                  <span className="text-base font-corporate font-bold text-slate-100">#{block.blockNumber}</span>
                 </div>
 
                 <div className="space-y-1">
@@ -194,7 +194,7 @@ export const ProvenanceLedger: React.FC<ProvenanceLedgerProps> = ({
                     <span className="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700 font-mono">
                       {block.stratum} • {block.level}
                     </span>
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-amber-950/40 text-amber-300 border border-amber-800/40">
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700 font-mono">
                       {block.vault}
                     </span>
                     <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-950/50 text-emerald-300 border border-emerald-800/40 flex items-center gap-1 font-mono">
@@ -228,18 +228,18 @@ export const ProvenanceLedger: React.FC<ProvenanceLedgerProps> = ({
                 <div className="space-y-1 text-right">
                   <div className="flex items-center space-x-1.5 font-mono text-[11px]">
                     <span className="text-slate-500 text-[10px]">HASH:</span>
-                    <span className="text-amber-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
+                    <span className="text-slate-300 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
                       {truncateHash(block.hash, 10, 8)}
                     </span>
                     <button
                       onClick={() => handleCopy(block.hash)}
                       title="Copy SHA-256 Hash"
-                      className="text-slate-400 hover:text-amber-400 p-0.5"
+                      className="text-slate-400 hover:text-slate-200 p-0.5"
                     >
                       <Copy className="w-3.5 h-3.5" />
                     </button>
                     {copiedHash === block.hash && (
-                      <span className="text-[10px] text-emerald-400">Copied</span>
+                      <span className="text-[10px] text-emerald-400 font-sans">Copied</span>
                     )}
                   </div>
 
@@ -261,7 +261,7 @@ export const ProvenanceLedger: React.FC<ProvenanceLedgerProps> = ({
 
             {/* Payload summary if available */}
             {block.payloadData && (
-              <div className="mt-3 pt-2.5 border-t border-slate-800/60 bg-[#080d1c]/60 rounded-md p-2 text-xs flex flex-wrap gap-4 text-slate-300">
+              <div className="mt-3 pt-2.5 border-t border-slate-800/60 bg-[#0d1017] rounded-md p-2 text-xs flex flex-wrap gap-4 text-slate-300">
                 {Object.entries(block.payloadData).map(([k, v]) => (
                   <div key={k} className="flex items-center space-x-1.5">
                     <span className="text-slate-500 text-[11px] capitalize">{k.replace(/([A-Z])/g, ' $1')}:</span>
@@ -274,12 +274,12 @@ export const ProvenanceLedger: React.FC<ProvenanceLedgerProps> = ({
         ))}
 
         {filteredBlocks.length === 0 && (
-          <div className="text-center py-12 bg-[#0b1329]/50 border border-slate-800 rounded-xl text-slate-400">
-            <AlertCircle className="w-8 h-8 mx-auto text-slate-600 mb-2" />
+          <div className="text-center py-12 bg-[#121620] border border-slate-800 rounded-xl text-slate-400">
+            <AlertCircle className="w-8 h-8 mx-auto text-slate-500 mb-2" />
             <p className="text-sm font-medium">No ledger blocks match your search or filter criteria.</p>
             <button
               onClick={() => { setSearchQuery(''); setSelectedStratum('ALL'); setSelectedLevel('ALL'); }}
-              className="mt-2 text-xs text-amber-400 hover:underline"
+              className="mt-2 text-xs text-slate-300 underline hover:text-white"
             >
               Reset filters
             </button>

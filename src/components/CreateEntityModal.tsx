@@ -5,13 +5,6 @@
 
 import React, { useState } from 'react';
 import { 
-  PlusCircle, 
-  Sparkles, 
-  Layers, 
-  CheckCircle2, 
-  ShieldCheck 
-} from 'lucide-react';
-import { 
   SystemLifecycleEntity, 
   AtlasStratum, 
   AtlasLevel, 
@@ -24,7 +17,7 @@ import { STRATA_WEIGHTS, LEVEL_MULTIPLIERS, calculatePowerMetric } from '../util
 interface CreateEntityModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onCreateEntity: (newEntity: SystemLifecycleEntity) => void;
+  onCreateEntity: (entity: SystemLifecycleEntity) => void;
   currentSigner: MultiSigSigner;
 }
 
@@ -34,18 +27,17 @@ export const CreateEntityModal: React.FC<CreateEntityModalProps> = ({
   onCreateEntity,
   currentSigner
 }) => {
-  if (!isOpen) return null;
-
   const [title, setTitle] = useState('');
   const [targetType, setTargetType] = useState<SystemLifecycleEntity['targetType']>('Instrument');
-  const [holder, setHolder] = useState('Fiducia Centrale Custodial Trust');
-  const [issuingBody, setIssuingBody] = useState('Swiss Federal Chancellery / Cantonal Notary');
-  const [stratum, setStratum] = useState<AtlasStratum>('S04');
-  const [level, setLevel] = useState<AtlasLevel>('L3');
-  const [branch, setBranch] = useState<AuthorityBranch>('Swiss Sovereign & Verein Registry');
+  const [stratum, setStratum] = useState<AtlasStratum>('S06');
+  const [level, setLevel] = useState<AtlasLevel>('L4');
   const [vault, setVault] = useState<CoreVault>('Charter Repository');
-  const [parentGrant, setParentGrant] = useState('Swiss Civil Code (ZGB) & Swiss DLT Act Art. 973d');
-  const [jurisdiction, setJurisdiction] = useState('Zurich / Switzerland');
+  const [branch, setBranch] = useState<AuthorityBranch>('Swiss Sovereign & Verein Registry');
+  const [holder, setHolder] = useState(currentSigner.name);
+  const [issuingBody, setIssuingBody] = useState('Fiducia Centrale Sovereign Presidium');
+  const [parentGrant, setParentGrant] = useState('Swiss Code of Obligations (Art. 973d OR)');
+
+  if (!isOpen) return null;
 
   const provisionalPower = calculatePowerMetric(stratum, level, 1.25);
 
@@ -53,28 +45,29 @@ export const CreateEntityModal: React.FC<CreateEntityModalProps> = ({
     e.preventDefault();
     if (!title) return;
 
-    const newId = `FC-NODE-${Date.now().toString().slice(-5)}`;
+    const newId = `FC-NODE-${Math.floor(100 + Math.random() * 900)}`;
+
     const newEntity: SystemLifecycleEntity = {
       id: newId,
       title,
       targetType,
-      holder,
-      issuingBody,
       stratum,
       level,
-      branch,
       vault,
-      status: 'PROVISIONAL',
-      powerMetric: provisionalPower,
+      branch,
+      holder,
+      issuingBody,
       parentGrant,
+      status: 'ACTIVE',
+      powerMetric: provisionalPower,
       effectiveDate: new Date().toISOString().split('T')[0],
-      jurisdiction,
-      cryptographicSeal: `0x${Math.random().toString(16).slice(2)}${Math.random().toString(16).slice(2)}`,
+      jurisdiction: 'Switzerland / DLT Art. 973d OR',
+      cryptographicSeal: `0x${Math.random().toString(16).slice(2, 10)}${Math.random().toString(16).slice(2, 10)}`,
       signatories: [currentSigner.name],
       historyLog: [
         {
-          id: `HL-${Date.now().toString().slice(-4)}`,
-          timestamp: new Date().toLocaleString() + ' CET',
+          id: `HL-${Date.now()}`,
+          timestamp: new Date().toISOString(),
           verb: 'Create',
           operator: currentSigner.name,
           notes: 'Instantiated under Lifecycle Verb 09 (Create) with provisional placement.',
@@ -89,13 +82,13 @@ export const CreateEntityModal: React.FC<CreateEntityModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-[#0b1329] border border-slate-700 rounded-xl max-w-xl w-full p-6 shadow-2xl space-y-4 my-8">
+      <div className="bg-[#121620] border border-slate-700 rounded-xl max-w-xl w-full p-6 shadow-2xl space-y-4 my-8">
         <div className="flex items-center justify-between border-b border-slate-800 pb-3">
           <div>
-            <span className="text-[10px] font-mono text-amber-400 uppercase tracking-widest">
+            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">
               Verb 09 — Create
             </span>
-            <h3 className="text-base font-cinzel font-bold text-slate-100 flex items-center gap-2">
+            <h3 className="text-base font-corporate font-bold text-slate-100 flex items-center gap-2">
               Instantiate New Institutional Node
             </h3>
           </div>
@@ -113,7 +106,7 @@ export const CreateEntityModal: React.FC<CreateEntityModalProps> = ({
               placeholder="e.g. Alpine Biodiversity Perpetual Stewardship Trust"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full bg-[#080d1c] border border-slate-700 rounded-lg p-2 text-slate-100"
+              className="w-full bg-[#0d1017] border border-slate-700 rounded-lg p-2 text-slate-100"
             />
           </div>
 
@@ -123,7 +116,7 @@ export const CreateEntityModal: React.FC<CreateEntityModalProps> = ({
               <select
                 value={targetType}
                 onChange={(e) => setTargetType(e.target.value as any)}
-                className="w-full bg-[#080d1c] border border-slate-700 rounded-lg p-2 text-slate-200"
+                className="w-full bg-[#0d1017] border border-slate-700 rounded-lg p-2 text-slate-200"
               >
                 <option value="Instrument">Instrument</option>
                 <option value="Trust">Trust</option>
@@ -140,7 +133,7 @@ export const CreateEntityModal: React.FC<CreateEntityModalProps> = ({
               <select
                 value={vault}
                 onChange={(e) => setVault(e.target.value as any)}
-                className="w-full bg-[#080d1c] border border-slate-700 rounded-lg p-2 text-slate-200"
+                className="w-full bg-[#0d1017] border border-slate-700 rounded-lg p-2 text-slate-200"
               >
                 <option value="Charter Repository">Charter Repository</option>
                 <option value="Treaty Vault">Treaty Vault</option>
@@ -158,7 +151,7 @@ export const CreateEntityModal: React.FC<CreateEntityModalProps> = ({
               <select
                 value={stratum}
                 onChange={(e) => setStratum(e.target.value as any)}
-                className="w-full bg-[#080d1c] border border-slate-700 rounded-lg p-2 text-slate-200"
+                className="w-full bg-[#0d1017] border border-slate-700 rounded-lg p-2 text-slate-200"
               >
                 {Object.entries(STRATA_WEIGHTS).map(([c, v]) => (
                   <option key={c} value={c}>{c} — {v.name}</option>
@@ -171,7 +164,7 @@ export const CreateEntityModal: React.FC<CreateEntityModalProps> = ({
               <select
                 value={level}
                 onChange={(e) => setLevel(e.target.value as any)}
-                className="w-full bg-[#080d1c] border border-slate-700 rounded-lg p-2 text-slate-200"
+                className="w-full bg-[#0d1017] border border-slate-700 rounded-lg p-2 text-slate-200"
               >
                 {Object.entries(LEVEL_MULTIPLIERS).map(([c, v]) => (
                   <option key={c} value={c}>{c} — {v.name} ({v.operator})</option>
@@ -185,7 +178,7 @@ export const CreateEntityModal: React.FC<CreateEntityModalProps> = ({
             <select
               value={branch}
               onChange={(e) => setBranch(e.target.value as any)}
-              className="w-full bg-[#080d1c] border border-slate-700 rounded-lg p-2 text-slate-200"
+              className="w-full bg-[#0d1017] border border-slate-700 rounded-lg p-2 text-slate-200"
             >
               <option value="Swiss Sovereign & Verein Registry">Swiss Sovereign & Verein Registry</option>
               <option value="European Legal Orders">European Legal Orders</option>
@@ -203,7 +196,7 @@ export const CreateEntityModal: React.FC<CreateEntityModalProps> = ({
                 type="text"
                 value={holder}
                 onChange={(e) => setHolder(e.target.value)}
-                className="w-full bg-[#080d1c] border border-slate-700 rounded-lg p-2 text-slate-100"
+                className="w-full bg-[#0d1017] border border-slate-700 rounded-lg p-2 text-slate-100"
               />
             </div>
 
@@ -213,7 +206,7 @@ export const CreateEntityModal: React.FC<CreateEntityModalProps> = ({
                 type="text"
                 value={issuingBody}
                 onChange={(e) => setIssuingBody(e.target.value)}
-                className="w-full bg-[#080d1c] border border-slate-700 rounded-lg p-2 text-slate-100"
+                className="w-full bg-[#0d1017] border border-slate-700 rounded-lg p-2 text-slate-100"
               />
             </div>
           </div>
@@ -226,14 +219,14 @@ export const CreateEntityModal: React.FC<CreateEntityModalProps> = ({
               placeholder="e.g. Swiss Code of Obligations Art. 60-79 or Cantonal Decree"
               value={parentGrant}
               onChange={(e) => setParentGrant(e.target.value)}
-              className="w-full bg-[#080d1c] border border-slate-700 rounded-lg p-2 text-slate-100"
+              className="w-full bg-[#0d1017] border border-slate-700 rounded-lg p-2 text-slate-100"
             />
           </div>
 
           {/* Provisional Power Preview */}
-          <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg flex items-center justify-between text-xs">
+          <div className="p-3 bg-slate-900 border border-slate-800 rounded-lg flex items-center justify-between text-xs">
             <span className="text-slate-400">Provisional Authority-Power Score:</span>
-            <span className="font-mono font-bold text-amber-300 text-sm">
+            <span className="font-mono font-bold text-slate-100 text-sm">
               {provisionalPower} P_eff
             </span>
           </div>
@@ -248,7 +241,7 @@ export const CreateEntityModal: React.FC<CreateEntityModalProps> = ({
             </button>
             <button
               type="submit"
-              className="px-4 py-1.5 rounded bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md"
+              className="px-4 py-1.5 rounded bg-slate-100 hover:bg-white text-slate-900 font-semibold text-xs shadow-sm"
             >
               Instantiate Node & Anchor S06
             </button>

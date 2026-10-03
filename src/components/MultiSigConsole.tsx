@@ -8,19 +8,15 @@ import {
   Key, 
   ShieldCheck, 
   CheckCircle2, 
-  AlertCircle, 
-  Lock, 
-  Cpu, 
-  UserCheck, 
-  Fingerprint, 
-  Layers, 
   Clock, 
-  Sparkles,
-  Check,
-  Send
+  AlertCircle, 
+  UserCheck, 
+  Check, 
+  Lock, 
+  Fingerprint 
 } from 'lucide-react';
-import { MultiSigSigner, MultiSigProposal } from '../types/fiducia';
-import { truncateHash, formatCHF } from '../utils/crypto';
+import { MultiSigProposal, MultiSigSigner } from '../types/fiducia';
+import { truncateHash } from '../utils/crypto';
 
 interface MultiSigConsoleProps {
   signers: MultiSigSigner[];
@@ -36,16 +32,17 @@ export const MultiSigConsole: React.FC<MultiSigConsoleProps> = ({
   currentSigner
 }) => {
   const [signingProposalId, setSigningProposalId] = useState<string | null>(null);
-  const [successAnimationId, setSuccessAnimationId] = useState<string | null>(null);
 
-  const handleSign = async (proposal: MultiSigProposal) => {
+  const handleSign = (proposal: MultiSigProposal) => {
+    // Check if already signed
+    if (proposal.signatures.some(s => s.signerId === currentSigner.id)) {
+      return;
+    }
+
     setSigningProposalId(proposal.id);
-    // Simulate tactile cryptographic key attestation
     setTimeout(() => {
       onSignProposal(proposal.id, currentSigner);
       setSigningProposalId(null);
-      setSuccessAnimationId(proposal.id);
-      setTimeout(() => setSuccessAnimationId(null), 3000);
     }, 600);
   };
 
@@ -55,12 +52,12 @@ export const MultiSigConsole: React.FC<MultiSigConsoleProps> = ({
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="bg-[#0b1329]/90 border border-slate-800 rounded-xl p-5 shadow-sm">
+      <div className="bg-[#121620] border border-slate-800 rounded-xl p-5 shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-2">
-              <Key className="w-5 h-5 text-amber-400" />
-              <h2 className="text-lg font-cinzel font-bold text-slate-100">
+            <div className="flex items-center space-x-2.5">
+              <Key className="w-5 h-5 text-slate-300" />
+              <h2 className="text-lg font-corporate font-bold text-slate-100 tracking-tight">
                 Multi-Signature Custody Protocol (3-of-5 M-of-N)
               </h2>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-950/60 text-emerald-300 border border-emerald-800/40">
@@ -72,8 +69,8 @@ export const MultiSigConsole: React.FC<MultiSigConsoleProps> = ({
             </p>
           </div>
 
-          <div className="flex items-center space-x-2 bg-slate-900/80 border border-slate-800 rounded-lg p-3 text-xs">
-            <Fingerprint className="w-4 h-4 text-amber-400" />
+          <div className="flex items-center space-x-2 bg-slate-900 border border-slate-800 rounded-lg p-3 text-xs">
+            <Fingerprint className="w-4 h-4 text-slate-300" />
             <div>
               <span className="text-slate-400 text-[10px] uppercase font-mono block">Your Active Key</span>
               <span className="font-semibold text-slate-200">{currentSigner.name}</span>
@@ -85,7 +82,7 @@ export const MultiSigConsole: React.FC<MultiSigConsoleProps> = ({
       {/* 5 Institutional Signers Cards */}
       <div>
         <div className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-3 flex items-center gap-1.5">
-          <UserCheck className="w-3.5 h-3.5 text-amber-400" />
+          <UserCheck className="w-3.5 h-3.5 text-slate-300" />
           Institutional Swiss Signatories & Cryptographic Enclaves (5 Registered Seats)
         </div>
 
@@ -95,9 +92,9 @@ export const MultiSigConsole: React.FC<MultiSigConsoleProps> = ({
             return (
               <div
                 key={signer.id}
-                className={`bg-[#0b1329]/90 border rounded-xl p-3.5 flex flex-col justify-between transition-all ${
+                className={`bg-[#121620] border rounded-xl p-3.5 flex flex-col justify-between transition-all ${
                   isCurrentUser
-                    ? 'border-amber-500/60 shadow-md shadow-amber-500/5 bg-amber-500/5'
+                    ? 'border-slate-500 shadow-sm bg-slate-800/60'
                     : 'border-slate-800 hover:border-slate-700'
                 }`}
               >
@@ -106,7 +103,7 @@ export const MultiSigConsole: React.FC<MultiSigConsoleProps> = ({
                     <span className="text-[10px] font-mono text-slate-500">{signer.id}</span>
                     <span className={`text-[9px] px-1.5 py-0.5 rounded font-mono border ${
                       signer.type.includes('HSM')
-                        ? 'bg-purple-950/60 text-purple-300 border-purple-800/40'
+                        ? 'bg-slate-800 text-slate-300 border-slate-700'
                         : 'bg-emerald-950/60 text-emerald-300 border-emerald-800/40'
                     }`}>
                       {signer.type.split(' ')[0]}
@@ -116,7 +113,7 @@ export const MultiSigConsole: React.FC<MultiSigConsoleProps> = ({
                   <h4 className="text-xs font-bold text-slate-100 flex items-center gap-1">
                     {signer.name}
                     {isCurrentUser && (
-                      <span className="w-2 h-2 rounded-full bg-amber-400" title="Current Active Signer" />
+                      <span className="w-2 h-2 rounded-full bg-slate-200" title="Current Active Signer" />
                     )}
                   </h4>
 
@@ -127,7 +124,7 @@ export const MultiSigConsole: React.FC<MultiSigConsoleProps> = ({
 
                 <div className="mt-3 pt-2 border-t border-slate-800/80 space-y-1 text-[10px] font-mono">
                   <div className="text-slate-400 truncate">{signer.location}</div>
-                  <div className="text-amber-400/90 truncate">{signer.keyFingerprint}</div>
+                  <div className="text-slate-300 truncate">{signer.keyFingerprint}</div>
                 </div>
               </div>
             );
@@ -136,15 +133,15 @@ export const MultiSigConsole: React.FC<MultiSigConsoleProps> = ({
       </div>
 
       {/* Pending Proposals Queue */}
-      <div className="bg-[#0b1329]/90 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
+      <div className="bg-[#121620] border border-slate-800 rounded-xl overflow-hidden shadow-sm">
         <div className="p-4 border-b border-slate-800 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Lock className="w-4 h-4 text-amber-400" />
-            <h3 className="text-sm font-cinzel font-bold text-slate-100 uppercase tracking-wide">
+            <Lock className="w-4 h-4 text-slate-300" />
+            <h3 className="text-sm font-corporate font-bold text-slate-100 uppercase tracking-wide">
               Pending Multi-Sig Proposals Queue (Awaiting Quorum)
             </h3>
           </div>
-          <span className="text-xs font-mono text-amber-400 bg-amber-950/50 px-2 py-0.5 rounded border border-amber-800/40">
+          <span className="text-xs font-mono text-slate-300 bg-slate-800 px-2 py-0.5 rounded border border-slate-700">
             {pendingProposals.length} Action{pendingProposals.length !== 1 ? 's' : ''} Pending
           </span>
         </div>
@@ -179,11 +176,11 @@ export const MultiSigConsole: React.FC<MultiSigConsoleProps> = ({
                     <div className="flex flex-col items-start lg:items-end gap-2">
                       <div className="flex items-center space-x-2">
                         <span className="text-xs font-mono text-slate-300">
-                          Quorum: <strong className="text-amber-400">{signatureCount}</strong> / {proposal.requiredSignatures}
+                          Quorum: <strong className="text-slate-100">{signatureCount}</strong> / {proposal.requiredSignatures}
                         </span>
                         <div className="w-24 bg-slate-800 rounded-full h-2 overflow-hidden">
                           <div
-                            className={`h-2 rounded-full ${isThresholdMet ? 'bg-emerald-400' : 'bg-amber-400'}`}
+                            className={`h-2 rounded-full ${isThresholdMet ? 'bg-emerald-400' : 'bg-slate-300'}`}
                             style={{ width: `${Math.min(100, (signatureCount / proposal.requiredSignatures) * 100)}%` }}
                           />
                         </div>
@@ -198,7 +195,7 @@ export const MultiSigConsole: React.FC<MultiSigConsoleProps> = ({
                         <button
                           onClick={() => handleSign(proposal)}
                           disabled={signingProposalId === proposal.id}
-                          className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center space-x-1.5 shadow-md shadow-amber-500/10 transition-all cursor-pointer"
+                          className="px-4 py-2 rounded-lg bg-slate-100 hover:bg-white text-slate-900 font-semibold text-xs flex items-center space-x-1.5 shadow-sm transition-all cursor-pointer"
                         >
                           <Key className={`w-3.5 h-3.5 ${signingProposalId === proposal.id ? 'animate-spin' : ''}`} />
                           <span>
@@ -212,7 +209,7 @@ export const MultiSigConsole: React.FC<MultiSigConsoleProps> = ({
                   </div>
 
                   {/* Signatures Timeline */}
-                  <div className="bg-[#080d1c] border border-slate-800/80 rounded-lg p-3">
+                  <div className="bg-[#0d1017] border border-slate-800/80 rounded-lg p-3">
                     <div className="text-[10px] uppercase font-mono text-slate-400 mb-2">
                       Cryptographic Signatures Collected ({signatureCount}/{proposal.requiredSignatures})
                     </div>
@@ -221,7 +218,7 @@ export const MultiSigConsole: React.FC<MultiSigConsoleProps> = ({
                       {proposal.signatures.map((sig, sIdx) => {
                         const sInfo = signers.find(s => s.id === sig.signerId);
                         return (
-                          <div key={sIdx} className="bg-slate-900/80 border border-slate-800 rounded p-2 text-xs flex items-center space-x-2">
+                          <div key={sIdx} className="bg-slate-900 border border-slate-800 rounded p-2 text-xs flex items-center space-x-2">
                             <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                             <div className="truncate">
                               <div className="font-medium text-slate-200 truncate">{sInfo?.name || sig.signerId}</div>
@@ -255,11 +252,11 @@ export const MultiSigConsole: React.FC<MultiSigConsoleProps> = ({
 
       {/* Executed Proposals History */}
       {executedProposals.length > 0 && (
-        <div className="bg-[#0b1329]/90 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
+        <div className="bg-[#121620] border border-slate-800 rounded-xl overflow-hidden shadow-sm">
           <div className="p-4 border-b border-slate-800 flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <h3 className="text-sm font-cinzel font-bold text-slate-100 uppercase tracking-wide">
+              <h3 className="text-sm font-corporate font-bold text-slate-100 uppercase tracking-wide">
                 Executed Multi-Sig Consensus Log
               </h3>
             </div>
@@ -268,7 +265,7 @@ export const MultiSigConsole: React.FC<MultiSigConsoleProps> = ({
 
           <div className="divide-y divide-slate-800/60">
             {executedProposals.map(exec => (
-              <div key={exec.id} className="p-4 flex items-center justify-between text-xs hover:bg-slate-800/20">
+              <div key={exec.id} className="p-4 flex items-center justify-between text-xs hover:bg-slate-800/30">
                 <div className="space-y-0.5">
                   <span className="font-semibold text-slate-200">{exec.title}</span>
                   <div className="text-[11px] text-slate-400 flex items-center gap-2">

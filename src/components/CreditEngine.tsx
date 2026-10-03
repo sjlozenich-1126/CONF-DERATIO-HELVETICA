@@ -6,24 +6,21 @@
 import React, { useState } from 'react';
 import { 
   Scale, 
-  TrendingUp, 
-  ShieldCheck, 
-  AlertCircle, 
-  CheckCircle2, 
-  DollarSign, 
   Sparkles, 
-  ArrowUpRight, 
-  ChevronRight,
-  Landmark,
-  Layers
+  CheckCircle2, 
+  AlertCircle, 
+  TrendingUp, 
+  Landmark, 
+  ShieldCheck, 
+  Coins 
 } from 'lucide-react';
 import { CreditFacility, MultiSigSigner } from '../types/fiducia';
 import { formatCHF } from '../utils/crypto';
 
 interface CreditEngineProps {
   creditFacilities: CreditFacility[];
-  onIssueCredit: (newFacility: CreditFacility, submitToMultiSig: boolean) => void;
-  onDrawdownOrRepay: (facilityId: string, action: 'DRAWDOWN' | 'REPAY', amount: number) => void;
+  onIssueCredit: (newFacility: CreditFacility, requiresMultiSig: boolean) => void;
+  onDrawdownOrRepay: (facilityId: string, type: 'DRAWDOWN' | 'REPAY', amount: number) => void;
   currentSigner: MultiSigSigner;
 }
 
@@ -33,75 +30,73 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
   onDrawdownOrRepay,
   currentSigner
 }) => {
+  // Form State
   const [borrower, setBorrower] = useState('');
   const [counterpartyType, setCounterpartyType] = useState<CreditFacility['counterpartyType']>('Regenerative Trust');
-  const [facilityAmount, setFacilityAmount] = useState(50000000);
-  const [interestRate, setInterestRate] = useState(1.75);
-  const [tenorYears, setTenorYears] = useState(10);
+  const [facilityAmount, setFacilityAmount] = useState<number>(25000000);
+  const [interestRate, setInterestRate] = useState<number>(2.15);
+  const [tenorYears, setTenorYears] = useState<number>(10);
   const [collateralType, setCollateralType] = useState('Allocated Gotthard Gold Bullion');
-  const [collateralValue, setCollateralValue] = useState(75000000);
-  const [hdiScore, setHdiScore] = useState(94);
-  const [selectedSdgs, setSelectedSdgs] = useState<number[]>([7, 13]);
-  const [governingLaw, setGoverningLaw] = useState('Swiss Code of Obligations & Swiss DLT Act Art. 973d');
+  const [collateralValue, setCollateralValue] = useState<number>(37500000);
+  const [hdiScore, setHdiScore] = useState<number>(91);
+  const [selectedSdgs, setSelectedSdgs] = useState<number[]>([7, 9, 13]);
+
+  // Modal State for Drawdown or Repayment
   const [activeFacilityAction, setActiveFacilityAction] = useState<{ id: string; type: 'DRAWDOWN' | 'REPAY' } | null>(null);
-  const [actionAmount, setActionAmount] = useState(10000000);
+  const [actionAmount, setActionAmount] = useState<number>(5000000);
 
-  const collateralRatio = facilityAmount > 0 
-    ? Number(((collateralValue / facilityAmount) * 100).toFixed(1)) 
-    : 0;
-
-  const ultraViresCleared = collateralRatio >= 120 && hdiScore >= 70;
-
-  const toggleSdg = (sdg: number) => {
-    if (selectedSdgs.includes(sdg)) {
-      setSelectedSdgs(selectedSdgs.filter(s => s !== sdg));
+  const toggleSdg = (num: number) => {
+    if (selectedSdgs.includes(num)) {
+      setSelectedSdgs(selectedSdgs.filter(n => n !== num));
     } else {
-      setSelectedSdgs([...selectedSdgs, sdg]);
+      setSelectedSdgs([...selectedSdgs, num]);
     }
   };
+
+  const collateralRatio = facilityAmount > 0 
+    ? ((collateralValue / facilityAmount) * 100).toFixed(1) 
+    : '0';
+
+  const ultraViresCleared = Number(collateralRatio) >= 120;
 
   const handleCreateFacility = (e: React.FormEvent) => {
     e.preventDefault();
     if (!borrower) return;
 
-    const maturityDate = new Date();
-    maturityDate.setFullYear(maturityDate.getFullYear() + tenorYears);
+    const maturityYear = new Date().getFullYear() + tenorYears;
+    const maturityDate = `${maturityYear}-12-31`;
 
-    const newFacility: CreditFacility = {
-      id: `CRED-${Date.now().toString().slice(-6)}`,
+    const newFac: CreditFacility = {
+      id: `CR-FAC-${Math.floor(100 + Math.random() * 900)}`,
       borrower,
       counterpartyType,
       facilityAmountCHF: facilityAmount,
       drawnAmountCHF: 0,
       interestRate,
-      maturityDate: maturityDate.toISOString().split('T')[0],
       collateralType,
       collateralValueCHF: collateralValue,
-      collateralRatio,
+      collateralRatio: Number(((collateralValue / facilityAmount) * 100).toFixed(1)),
       hdiAlignmentScore: hdiScore,
       sdgGoals: selectedSdgs,
+      maturityDate,
       status: 'ACTIVE',
       ultraViresAuditStatus: ultraViresCleared ? 'CLEARED' : 'CONDITIONAL',
-      governingLaw
+      governingLaw: 'Swiss Code of Obligations (DLT Act Art. 973d)'
     };
 
-    // If facility > 20M CHF, it requires 3/5 multi-sig consensus
-    const requiresMultiSig = facilityAmount >= 20000000;
-    onIssueCredit(newFacility, requiresMultiSig);
-
-    // Reset form
+    onIssueCredit(newFac, facilityAmount >= 20000000);
     setBorrower('');
   };
 
   return (
     <div className="space-y-6">
       {/* Header Info */}
-      <div className="bg-[#0b1329]/90 border border-slate-800 rounded-xl p-5 shadow-sm">
+      <div className="bg-[#121620] border border-slate-800 rounded-xl p-5 shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-2">
-              <Scale className="w-5 h-5 text-amber-400" />
-              <h2 className="text-lg font-cinzel font-bold text-slate-100">
+            <div className="flex items-center space-x-2.5">
+              <Scale className="w-5 h-5 text-slate-300" />
+              <h2 className="text-lg font-corporate font-bold text-slate-100 tracking-tight">
                 Regenerative Credit & Capital Risk Engine
               </h2>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-950/60 text-emerald-300 border border-emerald-800/40">
@@ -113,10 +108,10 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
             </p>
           </div>
 
-          <div className="flex items-center space-x-3 text-xs bg-slate-900/80 border border-slate-800 rounded-lg p-3">
+          <div className="flex items-center space-x-3 text-xs bg-slate-900 border border-slate-800 rounded-lg p-3">
             <div>
               <span className="text-slate-400 block text-[10px] uppercase font-mono">Total Credit Outstanding</span>
-              <span className="text-sm font-cinzel font-bold text-slate-100">
+              <span className="text-sm font-corporate font-bold text-slate-100">
                 {formatCHF(creditFacilities.reduce((acc, c) => acc + c.drawnAmountCHF, 0))}
               </span>
             </div>
@@ -134,15 +129,15 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
       {/* Grid: Issuance Form & Active Portfolio */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Credit Underwriting Form */}
-        <div className="lg:col-span-5 bg-[#0b1329]/90 border border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
+        <div className="lg:col-span-5 bg-[#121620] border border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
             <div className="flex items-center space-x-2">
-              <Sparkles className="w-4 h-4 text-amber-400" />
-              <h3 className="text-sm font-cinzel font-bold text-slate-100 uppercase tracking-wide">
+              <Sparkles className="w-4 h-4 text-slate-300" />
+              <h3 className="text-sm font-corporate font-bold text-slate-100 uppercase tracking-wide">
                 Underwrite Credit Facility
               </h3>
             </div>
-            <span className="text-[10px] font-mono text-slate-500">Swiss DLT Rail</span>
+            <span className="text-[10px] font-mono text-slate-400">Swiss DLT Rail</span>
           </div>
 
           <form onSubmit={handleCreateFacility} className="space-y-3.5 text-xs">
@@ -154,7 +149,7 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
                 placeholder="e.g. Cantonal Alpine Hydro Grid Consortium"
                 value={borrower}
                 onChange={(e) => setBorrower(e.target.value)}
-                className="w-full bg-[#080d1c] border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-amber-500"
+                className="w-full bg-[#0d1017] border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-slate-500"
               />
             </div>
 
@@ -164,7 +159,7 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
                 <select
                   value={counterpartyType}
                   onChange={(e) => setCounterpartyType(e.target.value as any)}
-                  className="w-full bg-[#080d1c] border border-slate-700 rounded-lg px-3 py-2 text-slate-200"
+                  className="w-full bg-[#0d1017] border border-slate-700 rounded-lg px-3 py-2 text-slate-200"
                 >
                   <option value="Regenerative Trust">Regenerative Trust</option>
                   <option value="Infrastructure Authority">Infrastructure Authority</option>
@@ -181,7 +176,7 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
                   max={30}
                   value={tenorYears}
                   onChange={(e) => setTenorYears(Number(e.target.value))}
-                  className="w-full bg-[#080d1c] border border-slate-700 rounded-lg px-3 py-2 text-slate-100"
+                  className="w-full bg-[#0d1017] border border-slate-700 rounded-lg px-3 py-2 text-slate-100"
                 />
               </div>
             </div>
@@ -195,9 +190,9 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
                   min={1000000}
                   value={facilityAmount}
                   onChange={(e) => setFacilityAmount(Number(e.target.value))}
-                  className="w-full bg-[#080d1c] border border-slate-700 rounded-lg px-3 py-2 text-slate-100 font-mono"
+                  className="w-full bg-[#0d1017] border border-slate-700 rounded-lg px-3 py-2 text-slate-100 font-mono"
                 />
-                <span className="text-[10px] text-amber-400 font-mono mt-0.5 block">
+                <span className="text-[10px] text-slate-400 font-mono mt-0.5 block">
                   {formatCHF(facilityAmount)}
                 </span>
               </div>
@@ -212,7 +207,7 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
                     max={10.0}
                     value={interestRate}
                     onChange={(e) => setInterestRate(Number(e.target.value))}
-                    className="w-full bg-[#080d1c] border border-slate-700 rounded-lg px-3 py-2 text-slate-100 font-mono"
+                    className="w-full bg-[#0d1017] border border-slate-700 rounded-lg px-3 py-2 text-slate-100 font-mono"
                   />
                   <span className="absolute right-3 top-2 text-slate-500 font-mono">%</span>
                 </div>
@@ -225,7 +220,7 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
                 <select
                   value={collateralType}
                   onChange={(e) => setCollateralType(e.target.value)}
-                  className="w-full bg-[#080d1c] border border-slate-700 rounded-lg px-3 py-2 text-slate-200 text-[11px]"
+                  className="w-full bg-[#0d1017] border border-slate-700 rounded-lg px-3 py-2 text-slate-200 text-[11px]"
                 >
                   <option value="Allocated Gotthard Gold Bullion">Allocated Gotthard Gold Bullion</option>
                   <option value="Alpine Hydroelectric Concession Deeds">Alpine Hydroelectric Concession Deeds</option>
@@ -241,7 +236,7 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
                   step={1000000}
                   value={collateralValue}
                   onChange={(e) => setCollateralValue(Number(e.target.value))}
-                  className="w-full bg-[#080d1c] border border-slate-700 rounded-lg px-3 py-2 text-slate-100 font-mono"
+                  className="w-full bg-[#0d1017] border border-slate-700 rounded-lg px-3 py-2 text-slate-100 font-mono"
                 />
                 <span className="text-[10px] text-emerald-400 font-mono mt-0.5 block">
                   {formatCHF(collateralValue)}
@@ -253,7 +248,7 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
             <div className={`p-3 rounded-lg border text-xs flex items-center justify-between ${
               ultraViresCleared 
                 ? 'bg-emerald-950/30 border-emerald-800/50 text-emerald-200'
-                : 'bg-amber-950/30 border-amber-800/50 text-amber-200'
+                : 'bg-slate-800/60 border-slate-700 text-slate-300'
             }`}>
               <div>
                 <span className="text-[10px] uppercase font-mono block text-slate-400">Coverage Ratio</span>
@@ -271,7 +266,7 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
                     </>
                   ) : (
                     <>
-                      <AlertCircle className="w-3.5 h-3.5 text-amber-400" />
+                      <AlertCircle className="w-3.5 h-3.5 text-slate-400" />
                       Requires Subordination
                     </>
                   )}
@@ -283,7 +278,7 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
             <div>
               <div className="flex items-center justify-between text-slate-400 mb-1">
                 <span>Human Development Index (HDI) Alignment:</span>
-                <span className="text-amber-300 font-mono font-bold">{hdiScore} / 100</span>
+                <span className="text-slate-200 font-mono font-bold">{hdiScore} / 100</span>
               </div>
               <input
                 type="range"
@@ -291,7 +286,7 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
                 max={100}
                 value={hdiScore}
                 onChange={(e) => setHdiScore(Number(e.target.value))}
-                className="w-full accent-amber-500 cursor-pointer"
+                className="w-full accent-slate-400 cursor-pointer"
               />
             </div>
 
@@ -312,8 +307,8 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
                     onClick={() => toggleSdg(sdg.num)}
                     className={`px-2 py-1 rounded text-[10px] font-mono border transition-all ${
                       selectedSdgs.includes(sdg.num)
-                        ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-                        : 'bg-slate-900/60 text-slate-500 border-slate-800 hover:text-slate-300'
+                        ? 'bg-slate-100 text-slate-900 border-white font-semibold'
+                        : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
                     }`}
                   >
                     SDG {sdg.num}
@@ -324,7 +319,7 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
 
             <button
               type="submit"
-              className="w-full py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center space-x-1.5 shadow-md shadow-amber-500/10 transition-all"
+              className="w-full py-2.5 rounded-lg bg-slate-100 hover:bg-white text-slate-900 font-semibold text-xs flex items-center justify-center space-x-1.5 shadow-sm transition-all"
             >
               <CheckCircle2 className="w-4 h-4" />
               <span>
@@ -337,12 +332,12 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
         </div>
 
         {/* Right Column: Active Credit Facilities */}
-        <div className="lg:col-span-7 bg-[#0b1329]/90 border border-slate-800 rounded-xl overflow-hidden shadow-sm flex flex-col justify-between">
+        <div className="lg:col-span-7 bg-[#121620] border border-slate-800 rounded-xl overflow-hidden shadow-sm flex flex-col justify-between">
           <div>
             <div className="p-4 border-b border-slate-800 flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <Landmark className="w-4 h-4 text-amber-400" />
-                <h3 className="text-sm font-cinzel font-bold text-slate-100 uppercase tracking-wide">
+                <Landmark className="w-4 h-4 text-slate-300" />
+                <h3 className="text-sm font-corporate font-bold text-slate-100 uppercase tracking-wide">
                   Active Credit Facilities & Regenerative Portfolios
                 </h3>
               </div>
@@ -351,12 +346,12 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
 
             <div className="divide-y divide-slate-800/70">
               {creditFacilities.map(fac => (
-                <div key={fac.id} className="p-4 hover:bg-slate-800/30 transition-colors space-y-2">
+                <div key={fac.id} className="p-4 hover:bg-slate-800/40 transition-colors space-y-2">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                     <div>
                       <h4 className="text-sm font-semibold text-slate-100">{fac.borrower}</h4>
                       <div className="text-[11px] text-slate-400 flex items-center gap-2">
-                        <span className="font-mono text-amber-400">{fac.id}</span>
+                        <span className="font-mono text-slate-300">{fac.id}</span>
                         <span>•</span>
                         <span>{fac.counterpartyType}</span>
                         <span>•</span>
@@ -365,7 +360,7 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
                     </div>
 
                     <div className="text-right">
-                      <div className="text-sm font-cinzel font-bold text-slate-100">
+                      <div className="text-sm font-corporate font-bold text-slate-100">
                         {formatCHF(fac.drawnAmountCHF)} <span className="text-xs font-sans text-slate-400">/ {formatCHF(fac.facilityAmountCHF)}</span>
                       </div>
                       <span className="text-[10px] font-mono text-emerald-400">
@@ -377,7 +372,7 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
                   {/* Utilization Progress Bar */}
                   <div className="w-full bg-slate-900 rounded-full h-1.5 overflow-hidden">
                     <div 
-                      className="bg-amber-400 h-1.5 rounded-full" 
+                      className="bg-slate-300 h-1.5 rounded-full" 
                       style={{ width: `${Math.min(100, (fac.drawnAmountCHF / fac.facilityAmountCHF) * 100)}%` }}
                     />
                   </div>
@@ -393,7 +388,7 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => setActiveFacilityAction({ id: fac.id, type: 'DRAWDOWN' })}
-                        className="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-amber-300 text-[11px] border border-slate-700"
+                        className="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] border border-slate-700"
                       >
                         + Drawdown
                       </button>
@@ -411,7 +406,7 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
           </div>
 
           {/* Footnote on Swiss Banking Act Compliance */}
-          <div className="p-3 bg-[#080d1c] border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
+          <div className="p-3 bg-[#0d1017] border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
             <span className="flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
               Swiss Banking Act Art. 1b FinTech Exemption & Basel III Capital Buffers Active
@@ -424,9 +419,9 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
       {/* Drawdown / Repay Action Modal */}
       {activeFacilityAction && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-[#0b1329] border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-4 shadow-2xl">
+          <div className="bg-[#121620] border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-              <h3 className="text-sm font-cinzel font-bold text-slate-100">
+              <h3 className="text-sm font-corporate font-bold text-slate-100">
                 {activeFacilityAction.type === 'DRAWDOWN' ? 'Execute Tranche Drawdown' : 'Record Facility Repayment'}
               </h3>
               <button 
@@ -438,7 +433,7 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
             </div>
 
             <div className="text-xs text-slate-300">
-              Facility ID: <span className="font-mono text-amber-300">{activeFacilityAction.id}</span>
+              Facility ID: <span className="font-mono text-slate-200">{activeFacilityAction.id}</span>
             </div>
 
             <div>
@@ -448,9 +443,9 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
                 step={500000}
                 value={actionAmount}
                 onChange={(e) => setActionAmount(Number(e.target.value))}
-                className="w-full bg-[#080d1c] border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono text-sm"
+                className="w-full bg-[#0d1017] border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono text-sm"
               />
-              <div className="text-[11px] text-amber-400 font-mono mt-1">
+              <div className="text-[11px] text-slate-300 font-mono mt-1">
                 {formatCHF(actionAmount)}
               </div>
             </div>
@@ -467,7 +462,7 @@ export const CreditEngine: React.FC<CreditEngineProps> = ({
                   onDrawdownOrRepay(activeFacilityAction.id, activeFacilityAction.type, actionAmount);
                   setActiveFacilityAction(null);
                 }}
-                className="px-4 py-1.5 rounded bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md"
+                className="px-4 py-1.5 rounded bg-slate-100 hover:bg-white text-slate-900 font-semibold text-xs shadow-sm"
               >
                 Confirm & Anchor to S06
               </button>

@@ -11,9 +11,7 @@ import {
   Clock, 
   Copy, 
   FileCode, 
-  Key, 
-  Lock,
-  RefreshCw
+  RefreshCw 
 } from 'lucide-react';
 import { ProvenanceBlock } from '../types/fiducia';
 import { truncateHash, sha256 } from '../utils/crypto';
@@ -49,18 +47,18 @@ export const BlockDetailModal: React.FC<BlockDetailModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-[#0b1329] border border-slate-700 rounded-xl max-w-2xl w-full p-6 shadow-2xl space-y-5 my-8">
+      <div className="bg-[#121620] border border-slate-700 rounded-xl max-w-2xl w-full p-6 shadow-2xl space-y-5 my-8">
         <div className="flex items-start justify-between border-b border-slate-800 pb-3">
           <div>
             <div className="flex items-center space-x-2">
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950/60 text-amber-300 border border-amber-800/40">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-200 border border-slate-700">
                 PROVENANCE BLOCK #{block.blockNumber}
               </span>
               <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/40 px-1.5 py-0.5 rounded border border-emerald-800/40">
                 {block.action}
               </span>
             </div>
-            <h3 className="text-base font-cinzel font-bold text-slate-100 mt-1">
+            <h3 className="text-base font-corporate font-bold text-slate-100 mt-1">
               Cryptographic Block Inspection
             </h3>
           </div>
@@ -74,19 +72,19 @@ export const BlockDetailModal: React.FC<BlockDetailModalProps> = ({
         </div>
 
         {/* Hashes & Linkage */}
-        <div className="space-y-3 bg-[#080d1c] p-3.5 rounded-lg border border-slate-800 text-xs font-mono">
+        <div className="space-y-3 bg-[#0d1017] p-3.5 rounded-lg border border-slate-800 text-xs font-mono">
           <div>
             <div className="flex items-center justify-between text-slate-400 text-[10px] mb-1">
               <span>BLOCK HASH (SHA-256):</span>
               <button
                 onClick={() => handleCopy(block.hash)}
-                className="text-amber-400 hover:underline flex items-center gap-1"
+                className="text-slate-300 hover:text-white flex items-center gap-1"
               >
                 <Copy className="w-3 h-3" />
                 <span>{copiedHash ? 'Copied' : 'Copy'}</span>
               </button>
             </div>
-            <div className="p-2 rounded bg-slate-900 border border-slate-800 text-amber-300 break-all text-[11px]">
+            <div className="p-2 rounded bg-slate-900 border border-slate-800 text-slate-200 break-all text-[11px]">
               {block.hash}
             </div>
           </div>
@@ -107,7 +105,7 @@ export const BlockDetailModal: React.FC<BlockDetailModalProps> = ({
         </div>
 
         {/* Live Re-calculation verification */}
-        <div className="bg-[#080d1c] p-3 rounded-lg border border-slate-800 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="bg-[#0d1017] p-3 rounded-lg border border-slate-800 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div>
             <span className="font-bold text-slate-200 block">Recalculate WebCrypto SHA-256</span>
             <span className="text-slate-400 text-[11px]">Validates block payload against local cryptographic subsystem.</span>
@@ -116,7 +114,7 @@ export const BlockDetailModal: React.FC<BlockDetailModalProps> = ({
           <button
             onClick={verifyThisBlock}
             disabled={isVerifyingBlock}
-            className="px-3 py-1.5 rounded bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 font-medium text-xs flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-medium text-xs flex items-center gap-1.5"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isVerifyingBlock ? 'animate-spin' : ''}`} />
             <span>Verify Locally</span>
@@ -135,22 +133,22 @@ export const BlockDetailModal: React.FC<BlockDetailModalProps> = ({
 
         {/* Metadata Grid */}
         <div className="grid grid-cols-2 gap-2 text-xs">
-          <div className="p-2.5 bg-[#080d1c] border border-slate-800 rounded-lg">
+          <div className="p-2.5 bg-[#0d1017] border border-slate-800 rounded-lg">
             <span className="text-slate-500 text-[10px] uppercase font-mono block">Timestamp</span>
             <span className="text-slate-200 font-medium">{new Date(block.timestamp).toLocaleString()} CET</span>
           </div>
 
-          <div className="p-2.5 bg-[#080d1c] border border-slate-800 rounded-lg">
+          <div className="p-2.5 bg-[#0d1017] border border-slate-800 rounded-lg">
             <span className="text-slate-500 text-[10px] uppercase font-mono block">Custodian Delegated</span>
             <span className="text-slate-200 font-mono font-medium">{block.custodian}</span>
           </div>
 
-          <div className="p-2.5 bg-[#080d1c] border border-slate-800 rounded-lg">
+          <div className="p-2.5 bg-[#0d1017] border border-slate-800 rounded-lg">
             <span className="text-slate-500 text-[10px] uppercase font-mono block">Stratum & Level</span>
             <span className="text-slate-200 font-mono font-medium">{block.stratum} • {block.level}</span>
           </div>
 
-          <div className="p-2.5 bg-[#080d1c] border border-slate-800 rounded-lg">
+          <div className="p-2.5 bg-[#0d1017] border border-slate-800 rounded-lg">
             <span className="text-slate-500 text-[10px] uppercase font-mono block">Multi-Sig Consensus</span>
             <span className="text-emerald-400 font-mono font-medium">{block.multiSigStatus}</span>
           </div>
@@ -163,7 +161,7 @@ export const BlockDetailModal: React.FC<BlockDetailModalProps> = ({
               <FileCode className="w-3.5 h-3.5" />
               Raw Block Payload Data
             </div>
-            <pre className="bg-[#080d1c] p-3 rounded-lg border border-slate-800 font-mono text-[11px] text-slate-300 overflow-x-auto">
+            <pre className="bg-[#0d1017] p-3 rounded-lg border border-slate-800 font-mono text-[11px] text-slate-300 overflow-x-auto">
               {JSON.stringify(block.payloadData, null, 2)}
             </pre>
           </div>

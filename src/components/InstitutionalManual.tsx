@@ -6,23 +6,18 @@
 import React, { useState } from 'react';
 import { 
   BookOpen, 
-  ShieldCheck, 
-  Award, 
-  Key, 
-  Coins, 
   Layers, 
-  Globe, 
-  Send, 
-  CheckCircle2, 
   FileText, 
+  Scale, 
+  Coins, 
+  Globe, 
+  Key, 
+  Send, 
+  ShieldCheck, 
+  CheckCircle2, 
   Printer, 
-  Download, 
-  ExternalLink,
-  Lock,
-  Sparkles,
-  Cpu,
   ChevronRight,
-  Scale
+  UserCheck
 } from 'lucide-react';
 import { MultiSigSigner } from '../types/fiducia';
 
@@ -30,20 +25,22 @@ interface InstitutionalManualProps {
   currentSigner: MultiSigSigner;
 }
 
-export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ currentSigner }) => {
-  const [activeChapter, setActiveChapter] = useState('genesis');
+export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({
+  currentSigner
+}) => {
+  const [activeChapter, setActiveChapter] = useState<string>('genesis');
 
   const chapters = [
-    { id: 'genesis', title: '1. Genesis & Institutional Mandate', icon: Award },
-    { id: 'ledger', title: '2. S06 Provenance Ledger Architecture', icon: Layers },
-    { id: 'verbs', title: '3. The Nine Lifecycle Verbs & Formula', icon: Sparkles },
-    { id: 'separations', title: '4. The Four Non-Negotiable Separations', icon: Scale },
-    { id: 'credit', title: '5. Credit & Regenerative Risk Underwriting', icon: ShieldCheck },
-    { id: 'currency', title: '6. Currency Minting & Proof-of-Reserves', icon: Coins },
-    { id: 'assets', title: '7. Global Economic Asset Tracking (DLT Act)', icon: Globe },
-    { id: 'multisig', title: '8. 3-of-5 Multi-Sig Protocol & HSM Enclaves', icon: Key },
-    { id: 'settlement', title: '9. Cross-Border Settlement (IVMS 101)', icon: Send },
-    { id: 'playbook', title: '10. Shane Jonathan Lozenich Operator Playbook', icon: BookOpen },
+    { id: 'genesis', title: '01. Genesis & Institutional Mandate', icon: BookOpen },
+    { id: 'ledger', title: '02. S06 Provenance Ledger Architecture', icon: Layers },
+    { id: 'verbs', title: '03. Nine Closed Lifecycle Operations', icon: FileText },
+    { id: 'separations', title: '04. The 4 Non-Negotiable Separations', icon: ShieldCheck },
+    { id: 'credit', title: '05. Credit & Regenerative Risk Underwriting', icon: Scale },
+    { id: 'currency', title: '06. Currency Minting & Proof-of-Reserves', icon: Coins },
+    { id: 'assets', title: '07. Global Economic Asset Tracking', icon: Globe },
+    { id: 'multisig', title: '08. 3-of-5 Multi-Sig Protocol & HSM Enclaves', icon: Key },
+    { id: 'settlement', title: '09. Cross-Border DvP/PvP Settlement Rails', icon: Send },
+    { id: 'playbook', title: '10. Master Operator Playbook (Shane Jonathan Lozenich)', icon: UserCheck },
   ];
 
   const handlePrint = () => {
@@ -53,15 +50,15 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="bg-[#0b1329]/90 border border-slate-800 rounded-xl p-5 shadow-sm">
+      <div className="bg-[#121620] border border-slate-800 rounded-xl p-5 shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-2">
-              <BookOpen className="w-5 h-5 text-amber-400" />
-              <h2 className="text-lg font-cinzel font-bold text-slate-100">
+            <div className="flex items-center space-x-2.5">
+              <BookOpen className="w-5 h-5 text-slate-300" />
+              <h2 className="text-lg font-corporate font-bold text-slate-100 tracking-tight">
                 Fiducia Centrale — Institutional Operating Manual & Sovereign Codex
               </h2>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-950/60 text-amber-300 border border-amber-800/40">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-300 border border-slate-700">
                 OFFICIAL CODEX • CHE-492.888.349
               </span>
             </div>
@@ -75,10 +72,10 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
               onClick={handlePrint}
               className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition-all border border-slate-700 cursor-pointer"
             >
-              <Printer className="w-3.5 h-3.5 text-amber-400" />
+              <Printer className="w-3.5 h-3.5 text-slate-300" />
               <span>Print Codex</span>
             </button>
-            <div className="bg-[#080d1c] border border-slate-800 px-3 py-1.5 rounded-lg text-xs font-mono text-emerald-400">
+            <div className="bg-[#0d1017] border border-slate-800 px-3 py-1.5 rounded-lg text-xs font-mono text-emerald-400">
               Authority: Shane Jonathan Lozenich
             </div>
           </div>
@@ -88,7 +85,7 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
       {/* Main Grid: Navigation Sidebar + Reading View */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Navigation Sidebar */}
-        <div className="lg:col-span-4 bg-[#0b1329]/90 border border-slate-800 rounded-xl p-4 shadow-sm space-y-1.5 h-fit">
+        <div className="lg:col-span-4 bg-[#121620] border border-slate-800 rounded-xl p-4 shadow-sm space-y-1.5 h-fit">
           <div className="text-[10px] uppercase font-mono text-slate-500 font-semibold px-2 mb-2">
             Table of Contents
           </div>
@@ -101,15 +98,15 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
                 onClick={() => setActiveChapter(ch.id)}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs text-left transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-amber-500/15 text-amber-300 font-bold border border-amber-500/40 shadow-sm'
+                    ? 'bg-slate-100 text-slate-900 font-bold border border-white shadow-sm'
                     : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200'
                 }`}
               >
                 <div className="flex items-center space-x-2.5 truncate">
-                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-amber-400' : 'text-slate-500'}`} />
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-slate-900' : 'text-slate-400'}`} />
                   <span className="truncate">{ch.title}</span>
                 </div>
-                <ChevronRight className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-amber-400' : 'text-slate-600'}`} />
+                <ChevronRight className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-slate-900' : 'text-slate-600'}`} />
               </button>
             );
           })}
@@ -125,19 +122,19 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
             </div>
             <div className="flex justify-between">
               <span>Presidium:</span>
-              <span className="font-mono text-amber-400 truncate">Shane Jonathan Lozenich</span>
+              <span className="font-mono text-slate-200 truncate">Shane Jonathan Lozenich</span>
             </div>
           </div>
         </div>
 
         {/* Content Viewer */}
-        <div className="lg:col-span-8 bg-[#0b1329]/90 border border-slate-800 rounded-xl p-6 shadow-sm space-y-6 text-slate-300 leading-relaxed text-xs">
+        <div className="lg:col-span-8 bg-[#121620] border border-slate-800 rounded-xl p-6 shadow-sm space-y-6 text-slate-300 leading-relaxed text-xs">
           {/* Chapter 1: Genesis & Institutional Mandate */}
           {activeChapter === 'genesis' && (
             <div className="space-y-4">
               <div className="border-b border-slate-800 pb-3">
-                <span className="text-[10px] font-mono text-amber-400 uppercase tracking-widest block">Chapter 01</span>
-                <h3 className="text-base font-cinzel font-bold text-slate-100">
+                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Chapter 01</span>
+                <h3 className="text-base font-corporate font-bold text-slate-100">
                   Genesis & Institutional Mandate of Fiducia Centrale
                 </h3>
               </div>
@@ -146,8 +143,8 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
                 <strong>Fiducia Centrale</strong> represents the institutional sovereign evolution from the International Archive established in the <em>Psychrosphere Atlas</em> (<code>https://psychrosphereatlas.vercel.app/</code>). While the Atlas mapped the genealogical, archaeological, and infrastructural lineage across Europe and the transatlantic space, Fiducia Centrale transforms those archival coordinates into an immutable, active financial and custodial reality.
               </p>
 
-              <div className="bg-[#080d1c] p-4 rounded-xl border border-slate-800 space-y-2">
-                <h4 className="font-bold text-amber-300 text-xs">Core Institutional Tenets:</h4>
+              <div className="bg-[#0d1017] p-4 rounded-xl border border-slate-800 space-y-2">
+                <h4 className="font-bold text-slate-100 text-xs">Core Institutional Tenets:</h4>
                 <ul className="list-disc list-inside space-y-1 text-slate-400 pl-1">
                   <li><strong>The Central Reserve of Trust:</strong> Anchoring intangible heritage and tangible infrastructure to cryptographic ledger-based uncertificated securities (Registerwertrechte).</li>
                   <li><strong>Full Reserve Backing:</strong> No maturity transformation, fractional reserves, or hyper-financialized rehypothecation. 100% backed by Gotthard physical gold ingots and central bank deposits.</li>
@@ -166,8 +163,8 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
           {activeChapter === 'ledger' && (
             <div className="space-y-4">
               <div className="border-b border-slate-800 pb-3">
-                <span className="text-[10px] font-mono text-amber-400 uppercase tracking-widest block">Chapter 02</span>
-                <h3 className="text-base font-cinzel font-bold text-slate-100">
+                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Chapter 02</span>
+                <h3 className="text-base font-corporate font-bold text-slate-100">
                   S06 Provenance Ledger Architecture & Cryptographic Hash Chaining
                 </h3>
               </div>
@@ -176,8 +173,8 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
                 Stratum 06 (<strong>S06 — Provenance & Ledger Custody</strong>) is the cryptographic spine of Fiducia Centrale. Every transaction, asset tokenization, credit draw, or charter amendment produces an immutable block appended to the chain.
               </p>
 
-              <div className="bg-[#080d1c] p-4 rounded-xl border border-slate-800 space-y-3 font-mono text-[11px]">
-                <div className="text-amber-400 font-bold">Cryptographic Block Linkage Formula:</div>
+              <div className="bg-[#0d1017] p-4 rounded-xl border border-slate-800 space-y-3 font-mono text-[11px]">
+                <div className="text-slate-200 font-bold">Cryptographic Block Linkage Formula:</div>
                 <div className="bg-slate-900 p-3 rounded border border-slate-800 text-slate-200">
                   H_n = SHA-256( H_{'{n-1}'} || BlockNumber || Action || EntityID || Timestamp || MerkleRoot )
                 </div>
@@ -186,18 +183,18 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
                 </p>
               </div>
 
-              <h4 className="font-bold text-slate-200 pt-2">The WebCrypto Live Integrity Verification Subsystem</h4>
+              <h4 className="font-bold text-slate-100 pt-2">The WebCrypto Live Integrity Verification Subsystem</h4>
               <p>
                 The ledger features an in-browser audit engine utilizing the native WebCrypto API (<code>crypto.subtle.digest</code>). When clicking <em>"Verify Cryptographic Integrity"</em>, the engine parses every block from genesis to the active block height, recalculating digests and Merkle trees to certify zero data corruption or unauthorized tampering.
               </p>
 
               <div className="grid grid-cols-2 gap-3 text-slate-300">
-                <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg">
-                  <strong className="text-amber-300 block mb-1">Merkle Tree Aggregation</strong>
+                <div className="p-3 bg-slate-900 border border-slate-800 rounded-lg">
+                  <strong className="text-slate-100 block mb-1">Merkle Tree Aggregation</strong>
                   <span>Transactions inside each block are paired into two-leaf Merkle roots, ensuring instant $O(\log n)$ inclusion proofs.</span>
                 </div>
-                <div className="p-3 bg-slate-900/60 border border-slate-800 rounded-lg">
-                  <strong className="text-amber-300 block mb-1">FINMA Compliance Stamp</strong>
+                <div className="p-3 bg-slate-900 border border-slate-800 rounded-lg">
+                  <strong className="text-slate-100 block mb-1">FINMA Compliance Stamp</strong>
                   <span>Every block embeds an automated Swiss FinTech attestation token (e.g. <code>FINMA-DLT-ART-973d-CERTIFIED</code>).</span>
                 </div>
               </div>
@@ -208,8 +205,8 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
           {activeChapter === 'verbs' && (
             <div className="space-y-4">
               <div className="border-b border-slate-800 pb-3">
-                <span className="text-[10px] font-mono text-amber-400 uppercase tracking-widest block">Chapter 03</span>
-                <h3 className="text-base font-cinzel font-bold text-slate-100">
+                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Chapter 03</span>
+                <h3 className="text-base font-corporate font-bold text-slate-100">
                   The Nine Lifecycle Verbs & Power Placement Formulation
                 </h3>
               </div>
@@ -230,8 +227,8 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
                   { num: '08', verb: 'Reorganize', desc: 'Restructures sub-nodes, updates Level (L1–L5), or transfers jurisdictional shelf.' },
                   { num: '09', verb: 'Create', desc: 'Instantiates a brand new governed node into the institutional archive.' },
                 ].map(v => (
-                  <div key={v.num} className="p-2.5 bg-[#080d1c] border border-slate-800 rounded-lg flex items-start space-x-3">
-                    <span className="font-mono font-bold text-amber-400 shrink-0 text-xs mt-0.5">{v.num}</span>
+                  <div key={v.num} className="p-2.5 bg-[#0d1017] border border-slate-800 rounded-lg flex items-start space-x-3">
+                    <span className="font-mono font-bold text-slate-300 shrink-0 text-xs mt-0.5">{v.num}</span>
                     <div>
                       <strong className="text-slate-200 block text-xs">{v.verb}</strong>
                       <span className="text-slate-400 text-[11px]">{v.desc}</span>
@@ -240,8 +237,8 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
                 ))}
               </div>
 
-              <h4 className="font-bold text-slate-200 pt-2">The Placement Power Formula:</h4>
-              <div className="bg-[#080d1c] p-3 rounded-lg border border-slate-800 font-mono text-[11px] text-amber-300">
+              <h4 className="font-bold text-slate-100 pt-2">The Placement Power Formula:</h4>
+              <div className="bg-[#0d1017] p-3 rounded-lg border border-slate-800 font-mono text-[11px] text-slate-200">
                 P_effective = BaseWeight(Stratum) × LevelMultiplier(Level) × SealFactor
               </div>
               <p className="text-slate-400 text-[11px]">
@@ -254,8 +251,8 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
           {activeChapter === 'separations' && (
             <div className="space-y-4">
               <div className="border-b border-slate-800 pb-3">
-                <span className="text-[10px] font-mono text-amber-400 uppercase tracking-widest block">Chapter 04</span>
-                <h3 className="text-base font-cinzel font-bold text-slate-100">
+                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Chapter 04</span>
+                <h3 className="text-base font-corporate font-bold text-slate-100">
                   The Four Non-Negotiable Epistemological Separations
                 </h3>
               </div>
@@ -265,9 +262,9 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
               </p>
 
               <div className="space-y-3">
-                <div className="p-3 bg-[#080d1c] border border-slate-800 rounded-lg">
+                <div className="p-3 bg-[#0d1017] border border-slate-800 rounded-lg">
                   <div className="flex items-center justify-between mb-1">
-                    <strong className="text-amber-300">1. Historical Origin vs Present Authority</strong>
+                    <strong className="text-slate-100">1. Historical Origin vs Present Authority</strong>
                     <span className="text-[10px] font-mono text-emerald-400">STRICTLY SEPARATED</span>
                   </div>
                   <p className="text-slate-400 text-[11px]">
@@ -275,9 +272,9 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
                   </p>
                 </div>
 
-                <div className="p-3 bg-[#080d1c] border border-slate-800 rounded-lg">
+                <div className="p-3 bg-[#0d1017] border border-slate-800 rounded-lg">
                   <div className="flex items-center justify-between mb-1">
-                    <strong className="text-amber-300">2. Evidence is Not Title</strong>
+                    <strong className="text-slate-100">2. Evidence is Not Title</strong>
                     <span className="text-[10px] font-mono text-emerald-400">STRICTLY SEPARATED</span>
                   </div>
                   <p className="text-slate-400 text-[11px]">
@@ -285,9 +282,9 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
                   </p>
                 </div>
 
-                <div className="p-3 bg-[#080d1c] border border-slate-800 rounded-lg">
+                <div className="p-3 bg-[#0d1017] border border-slate-800 rounded-lg">
                   <div className="flex items-center justify-between mb-1">
-                    <strong className="text-amber-300">3. Practical Capacity vs Legal Competence</strong>
+                    <strong className="text-slate-100">3. Practical Capacity vs Legal Competence</strong>
                     <span className="text-[10px] font-mono text-emerald-400">STRICTLY SEPARATED</span>
                   </div>
                   <p className="text-slate-400 text-[11px]">
@@ -295,9 +292,9 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
                   </p>
                 </div>
 
-                <div className="p-3 bg-[#080d1c] border border-slate-800 rounded-lg">
+                <div className="p-3 bg-[#0d1017] border border-slate-800 rounded-lg">
                   <div className="flex items-center justify-between mb-1">
-                    <strong className="text-amber-300">4. European Multi-Order Distinctions</strong>
+                    <strong className="text-slate-100">4. European Multi-Order Distinctions</strong>
                     <span className="text-[10px] font-mono text-emerald-400">STRICTLY SEPARATED</span>
                   </div>
                   <p className="text-slate-400 text-[11px]">
@@ -312,8 +309,8 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
           {activeChapter === 'credit' && (
             <div className="space-y-4">
               <div className="border-b border-slate-800 pb-3">
-                <span className="text-[10px] font-mono text-amber-400 uppercase tracking-widest block">Chapter 05</span>
-                <h3 className="text-base font-cinzel font-bold text-slate-100">
+                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Chapter 05</span>
+                <h3 className="text-base font-corporate font-bold text-slate-100">
                   Credit Issuance & Regenerative Capital Underwriting
                 </h3>
               </div>
@@ -323,21 +320,21 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <div className="p-3 bg-[#080d1c] border border-slate-800 rounded-lg">
-                  <strong className="text-amber-300 block mb-1">1. Over-Collateralization</strong>
+                <div className="p-3 bg-[#0d1017] border border-slate-800 rounded-lg">
+                  <strong className="text-slate-100 block mb-1">1. Over-Collateralization</strong>
                   <span className="text-slate-400 text-[11px]">Minimum 120% to 160% in physical Gotthard gold, cantonal hydroelectric concessions, or Swiss Confederation sovereign bonds.</span>
                 </div>
-                <div className="p-3 bg-[#080d1c] border border-slate-800 rounded-lg">
-                  <strong className="text-amber-300 block mb-1">2. HDI Alignment Score</strong>
+                <div className="p-3 bg-[#0d1017] border border-slate-800 rounded-lg">
+                  <strong className="text-slate-100 block mb-1">2. HDI Alignment Score</strong>
                   <span className="text-slate-400 text-[11px]">Human Development Index impact score (minimum 75/100 required) assessing community health, longevity, and education.</span>
                 </div>
-                <div className="p-3 bg-[#080d1c] border border-slate-800 rounded-lg">
-                  <strong className="text-amber-300 block mb-1">3. UN SDG Verification</strong>
+                <div className="p-3 bg-[#0d1017] border border-slate-800 rounded-lg">
+                  <strong className="text-slate-100 block mb-1">3. UN SDG Verification</strong>
                   <span className="text-slate-400 text-[11px]">Certified alignment with UN Sustainable Development Goals (SDG 7 Clean Energy, SDG 13 Climate, SDG 16 Governance).</span>
                 </div>
               </div>
 
-              <h4 className="font-bold text-slate-200 pt-2">Multi-Sig Automatic Routing Rule:</h4>
+              <h4 className="font-bold text-slate-100 pt-2">Multi-Sig Automatic Routing Rule:</h4>
               <p>
                 Any credit facility of <strong>CHF 20,000,000 or greater</strong> automatically bypasses unilateral issuance and is queued into the <strong>3-of-5 Multi-Signature Governance Queue</strong>, requiring institutional ratification across the cantonal enclaves.
               </p>
@@ -348,8 +345,8 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
           {activeChapter === 'currency' && (
             <div className="space-y-4">
               <div className="border-b border-slate-800 pb-3">
-                <span className="text-[10px] font-mono text-amber-400 uppercase tracking-widest block">Chapter 06</span>
-                <h3 className="text-base font-cinzel font-bold text-slate-100">
+                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Chapter 06</span>
+                <h3 className="text-base font-corporate font-bold text-slate-100">
                   Currency Minting, Acceptance & Proof-of-Reserves (FCHF & FRU)
                 </h3>
               </div>
@@ -359,20 +356,20 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className="p-3 bg-[#080d1c] border border-slate-800 rounded-lg">
+                <div className="p-3 bg-[#0d1017] border border-slate-800 rounded-lg">
                   <div className="flex items-center space-x-1.5 mb-1">
-                    <span className="font-mono font-bold text-amber-400 text-sm">FCHF</span>
-                    <span className="text-slate-400 font-semibold">— Fiducia Swiss Franc</span>
+                    <span className="font-mono font-bold text-slate-100 text-sm">FCHF</span>
+                    <span className="text-slate-300 font-semibold">— Fiducia Swiss Franc</span>
                   </div>
                   <p className="text-slate-400 text-[11px]">
                     Fixed 1:1 parity with the Swiss Franc (CHF). 100% backed by segregated physical gold ingots in the Gotthard Alpine Bunker and sight deposits held at the Swiss National Bank (SNB).
                   </p>
                 </div>
 
-                <div className="p-3 bg-[#080d1c] border border-slate-800 rounded-lg">
+                <div className="p-3 bg-[#0d1017] border border-slate-800 rounded-lg">
                   <div className="flex items-center space-x-1.5 mb-1">
-                    <span className="font-mono font-bold text-blue-400 text-sm">FRU</span>
-                    <span className="text-slate-400 font-semibold">— Fiducia Reserve Unit</span>
+                    <span className="font-mono font-bold text-slate-100 text-sm">FRU</span>
+                    <span className="text-slate-300 font-semibold">— Fiducia Reserve Unit</span>
                   </div>
                   <p className="text-slate-400 text-[11px]">
                     Synthetic global SDR-basket reserve unit (~1.34 CHF value), weighted against physical bullion, Swiss sovereign green bonds, and international trade claims.
@@ -380,7 +377,7 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
                 </div>
               </div>
 
-              <h4 className="font-bold text-slate-200 pt-2">Full-Reserve Backing Guarantee & Basel III Metrics</h4>
+              <h4 className="font-bold text-slate-100 pt-2">Full-Reserve Backing Guarantee & Basel III Metrics</h4>
               <p>
                 Every token in circulation is matched by verifiable assets held in segregated depositories. Under Basel III prudential standards, Fiducia Centrale maintains:
               </p>
@@ -396,8 +393,8 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
           {activeChapter === 'assets' && (
             <div className="space-y-4">
               <div className="border-b border-slate-800 pb-3">
-                <span className="text-[10px] font-mono text-amber-400 uppercase tracking-widest block">Chapter 07</span>
-                <h3 className="text-base font-cinzel font-bold text-slate-100">
+                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Chapter 07</span>
+                <h3 className="text-base font-corporate font-bold text-slate-100">
                   Global Economic Asset Tracking & Swiss DLT Act (Art. 973d OR)
                 </h3>
               </div>
@@ -406,8 +403,8 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
                 Under the landmark <em>Swiss Federal Act on the Adaptation of Federal Law to Developments in Distributed Ledger Technology (DLT Act)</em>, Swiss Code of Obligations Art. 973d–973i enables the issuance of <strong>Registerwertrechte</strong> (uncertificated ledger-based securities).
               </p>
 
-              <div className="bg-[#080d1c] p-4 rounded-xl border border-slate-800 space-y-2">
-                <h4 className="font-bold text-amber-300 text-xs">Primary Tracked Economic Infrastructure:</h4>
+              <div className="bg-[#0d1017] p-4 rounded-xl border border-slate-800 space-y-2">
+                <h4 className="font-bold text-slate-100 text-xs">Primary Tracked Economic Infrastructure:</h4>
                 <ul className="space-y-1.5 text-slate-300">
                   <li>• <strong>Gotthard Sovereign Specie Bunker:</strong> 15,400 kg allocated fine gold bullion (999.9 purity) held in Cantons Uri and Ticino.</li>
                   <li>• <strong>Aerogate Geneva Airport Freezone:</strong> Bonded customs corridor for international diplomatic and precious metals transport.</li>
@@ -427,8 +424,8 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
           {activeChapter === 'multisig' && (
             <div className="space-y-4">
               <div className="border-b border-slate-800 pb-3">
-                <span className="text-[10px] font-mono text-amber-400 uppercase tracking-widest block">Chapter 08</span>
-                <h3 className="text-base font-cinzel font-bold text-slate-100">
+                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Chapter 08</span>
+                <h3 className="text-base font-corporate font-bold text-slate-100">
                   3-of-5 Multi-Signature Protocol & HSM Hardware Enclaves
                 </h3>
               </div>
@@ -445,55 +442,59 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
                   { id: 'SIG-04', name: 'Shane Jonathan Lozenich', role: 'Independent Custodian & Vault Controller', loc: 'Basel Depository', type: 'Hardware Key (YubiKey)' },
                   { id: 'SIG-05', name: 'Securosys Primus HSM v3', role: 'Autonomous Zero-Knowledge Enclave', loc: 'Zug Crypto Valley', type: 'FIPS 140-2 Level 3 HSM' },
                 ].map(s => (
-                  <div key={s.id} className="p-3 bg-[#080d1c] border border-slate-800 rounded-lg flex items-center justify-between">
+                  <div key={s.id} className="p-3 bg-[#0d1017] border border-slate-800 rounded-lg flex items-center justify-between">
                     <div>
                       <div className="flex items-center space-x-2">
-                        <span className="font-mono text-amber-400 font-bold text-xs">{s.id}</span>
-                        <span className="text-slate-200 font-semibold">{s.name}</span>
+                        <span className="font-mono text-slate-200 font-bold text-xs">{s.id}</span>
+                        <span className="text-slate-100 font-semibold">{s.name}</span>
+                        <span className="text-[10px] text-slate-500">({s.loc})</span>
                       </div>
-                      <div className="text-[11px] text-slate-400 mt-0.5">{s.role} • {s.loc}</div>
+                      <div className="text-[11px] text-slate-400 mt-0.5">{s.role}</div>
                     </div>
-                    <span className="text-[10px] font-mono bg-slate-900 px-2 py-1 rounded text-slate-300 border border-slate-800">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-300 border border-slate-700">
                       {s.type}
                     </span>
                   </div>
                 ))}
               </div>
-
-              <h4 className="font-bold text-slate-200 pt-2">Autonomous Execution Trigger:</h4>
-              <p>
-                When a pending proposal receives its 3rd valid cryptographic signature, the smart custody logic immediately executes the on-chain commit, mints currency or disburses credit, and permanently seals the transaction into block history.
-              </p>
             </div>
           )}
 
-          {/* Chapter 9: Cross-Border Settlement (IVMS 101) */}
+          {/* Chapter 9: Cross-Border DvP/PvP Settlement Rails */}
           {activeChapter === 'settlement' && (
             <div className="space-y-4">
               <div className="border-b border-slate-800 pb-3">
-                <span className="text-[10px] font-mono text-amber-400 uppercase tracking-widest block">Chapter 09</span>
-                <h3 className="text-base font-cinzel font-bold text-slate-100">
-                  Cross-Border Settlement & FATF Travel Rule (IVMS 101)
+                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Chapter 09</span>
+                <h3 className="text-base font-corporate font-bold text-slate-100">
+                  Cross-Border DvP/PvP Settlement Rails & FATF Travel Rule
                 </h3>
               </div>
 
               <p>
-                To enable real-time institutional cross-border liquidity without counterparty settlement risk, Fiducia Centrale implements atomic <strong>Delivery vs Payment (DvP)</strong> and <strong>Payment vs Payment (PvP)</strong> rails aligned with the <em>Bank for International Settlements (BIS) Project Agora</em> and <em>Project Helvetia</em>.
+                To eliminate cross-border counterparty risk (Herstatt Risk), Fiducia Centrale implements <strong>Atomic Hash Time-Locked Contracts (HTLC)</strong> and <strong>Delivery vs Payment (DvP)</strong> protocols aligned with the Bank for International Settlements (BIS) Project Agora.
               </p>
 
-              <div className="bg-[#080d1c] p-4 rounded-xl border border-slate-800 space-y-2">
-                <h4 className="font-bold text-amber-300 text-xs">Active Settlement Corridors:</h4>
-                <ul className="space-y-1 text-slate-300 text-[11px]">
-                  <li>• <strong>Project Agora Corridor:</strong> Swiss SIC / Helvetia wCBDC ⇄ Eurosystem TARGET / TIPS</li>
-                  <li>• <strong>Swiss-UK Berne Agreement Rail:</strong> Zurich Vault ⇄ Bank of England CHAPS</li>
-                  <li>• <strong>Project Ubin-Helvetia:</strong> Zurich ⇄ Monetary Authority of Singapore (MAS MEPS+)</li>
-                  <li>• <strong>Fedwire Sovereign Custody:</strong> Zurich ⇄ US DTCC / Fedwire</li>
+              <div className="bg-[#0d1017] p-4 rounded-xl border border-slate-800 space-y-2">
+                <h4 className="font-bold text-slate-100 text-xs">Active Settlement Corridors:</h4>
+                <ul className="space-y-2 text-slate-300">
+                  <li>
+                    <strong>1. Swiss SIC / Project Helvetia ⇄ Eurosystem TIPS Corridor:</strong>
+                    <div className="text-[11px] text-slate-400">Direct wholesale central bank digital currency (wCBDC) atomic interchange between SNB and ECB.</div>
+                  </li>
+                  <li>
+                    <strong>2. Swiss-UK Berne Agreement Rail:</strong>
+                    <div className="text-[11px] text-slate-400">Mutual recognition financial services corridor linking Zurich/Geneva with the City of London (Bank of England CHAPS).</div>
+                  </li>
+                  <li>
+                    <strong>3. Project Ubin-Helvetia Corridor (Monetary Authority of Singapore):</strong>
+                    <div className="text-[11px] text-slate-400">24/7 cross-border liquidity and foreign exchange clearing.</div>
+                  </li>
                 </ul>
               </div>
 
-              <h4 className="font-bold text-slate-200 pt-2">FATF Recommendation 16 (Travel Rule):</h4>
+              <h4 className="font-bold text-slate-100 pt-2">FATF Travel Rule Compliance (IVMS 101):</h4>
               <p>
-                All inter-institutional transactions carry an encrypted <strong>IVMS 101 (interVASP Messaging Standard)</strong> payload containing hashed originator and beneficiary identifiers, ensuring strict compliance with FINMA Circular 2019/2 and international anti-money laundering (AMLA/GwG) regulations.
+                Under FINMA Circular 2019/2, all tokenized transfers exceeding CHF 1,000 transmit encrypted counterparty metadata packets using the inter-VASP Messaging Standard (IVMS 101), ensuring full AMLA/GwG compliance.
               </p>
             </div>
           )}
@@ -502,8 +503,8 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
           {activeChapter === 'playbook' && (
             <div className="space-y-4">
               <div className="border-b border-slate-800 pb-3">
-                <span className="text-[10px] font-mono text-amber-400 uppercase tracking-widest block">Chapter 10</span>
-                <h3 className="text-base font-cinzel font-bold text-slate-100">
+                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Chapter 10</span>
+                <h3 className="text-base font-corporate font-bold text-slate-100">
                   Master Operator Playbook for Shane Jonathan Lozenich
                 </h3>
               </div>
@@ -513,8 +514,8 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
               </p>
 
               <div className="space-y-3">
-                <div className="p-3 bg-[#080d1c] border border-slate-800 rounded-lg space-y-1.5">
-                  <div className="flex items-center space-x-2 text-amber-300 font-bold">
+                <div className="p-3 bg-[#0d1017] border border-slate-800 rounded-lg space-y-1.5">
+                  <div className="flex items-center space-x-2 text-slate-100 font-bold">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                     <span>Workflow 1: Executing a Lifecycle Verb on an Archival Node</span>
                   </div>
@@ -523,12 +524,12 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
                     <li>Select the target entity (e.g. <code>FC-CH-001</code>).</li>
                     <li>Choose the appropriate operation from the 9-verb palette (e.g. <em>06 — Issue</em>).</li>
                     <li>Verify the parent statutory grant is entered and valid under Swiss law.</li>
-                    <li>Click <strong>Execute Lifecycle State Transition</strong>. The system recalculates P_effective power score and writes a new block to S06.</li>
+                    <li>Click <strong>Commit to S06 Ledger</strong>. The system recalculates P_effective power score and writes a new block to S06.</li>
                   </ol>
                 </div>
 
-                <div className="p-3 bg-[#080d1c] border border-slate-800 rounded-lg space-y-1.5">
-                  <div className="flex items-center space-x-2 text-amber-300 font-bold">
+                <div className="p-3 bg-[#0d1017] border border-slate-800 rounded-lg space-y-1.5">
+                  <div className="flex items-center space-x-2 text-slate-100 font-bold">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                     <span>Workflow 2: Authorizing a Multi-Sig Proposal</span>
                   </div>
@@ -541,8 +542,8 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
                   </ol>
                 </div>
 
-                <div className="p-3 bg-[#080d1c] border border-slate-800 rounded-lg space-y-1.5">
-                  <div className="flex items-center space-x-2 text-amber-300 font-bold">
+                <div className="p-3 bg-[#0d1017] border border-slate-800 rounded-lg space-y-1.5">
+                  <div className="flex items-center space-x-2 text-slate-100 font-bold">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                     <span>Workflow 3: Verifying Cryptographic Chain Integrity</span>
                   </div>
@@ -554,7 +555,7 @@ export const InstitutionalManual: React.FC<InstitutionalManualProps> = ({ curren
                 </div>
               </div>
 
-              <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg text-amber-200 text-xs">
+              <div className="p-3 bg-slate-800 border border-slate-700 rounded-lg text-slate-200 text-xs">
                 <strong>Sole Custodial Attestation:</strong> This codex is signed, attested, and maintained by <strong>Shane Jonathan Lozenich</strong> in accordance with the Swiss Code of Obligations and the International Archive Covenant.
               </div>
             </div>
